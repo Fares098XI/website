@@ -61,38 +61,62 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         alert('Please fill out all fields.');
     }
 });
+// Toggle Chat Widget
+const chatWidget = document.getElementById('chat-widget');
+const closeChat = document.getElementById('close-chat');
+const chatToggle = document.createElement('button');
+chatToggle.id = 'chat-toggle';
+chatToggle.innerHTML = '💬';
+document.body.appendChild(chatToggle);
 
-// Initialize Chatbase AI Widget
-(function(){
-    if(!window.chatbase||window.chatbase("getState")!=="initialized"){
-        window.chatbase=(...arguments)=>{
-            if(!window.chatbase.q){window.chatbase.q=[]}
-            window.chatbase.q.push(arguments)
-        };
-        window.chatbase=new Proxy(window.chatbase,{
-            get(target,prop){
-                if(prop==="q"){return target.q}
-                return(...args)=>target(prop,...args)
-            }
-        })
-    }
-    const onLoad=function(){
-        const script=document.createElement("script");
-        script.src="https://www.chatbase.co/embed.min.js";
-        script.id="a8x2aNtBaMl_4_tRFcmlX"; // Your Chatbase script ID
-        script.domain="www.chatbase.co";
-        document.body.appendChild(script)
-    };
-    if(document.readyState==="complete"){onLoad()}
-    else{window.addEventListener("load",onLoad)}
-})();
+chatToggle.addEventListener('click', () => {
+  chatWidget.style.display = chatWidget.style.display === 'block' ? 'none' : 'block';
+});
 
-// Optional: Remove old chat widget code if no longer needed
-const oldChatWidget = document.getElementById('chat-widget');
-if (oldChatWidget) {
-    oldChatWidget.remove();
-}
-const oldChatToggle = document.getElementById('chat-toggle');
-if (oldChatToggle) {
-    oldChatToggle.remove();
-}
+closeChat.addEventListener('click', () => {
+  chatWidget.style.display = 'none';
+});
+
+// Send Message to Backend
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const chatMessages = document.getElementById('chat-messages');
+
+sendBtn.addEventListener('click', async () => {
+  const message = userInput.value.trim();
+  if (!message) return;
+
+  // Add user message to chat
+  const userMessage = document.createElement('div');
+  userMessage.classList.add('message', 'user-message');
+  userMessage.textContent = message;
+  chatMessages.appendChild(userMessage);
+
+  // Clear input
+  userInput.value = '';
+
+  // Scroll to bottom
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // Send message to backend
+  try {
+    const response = await fetch('http://localhost:5000/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+
+    const data = await response.json();
+
+    // Add bot response to chat
+    const botMessage = document.createElement('div');
+    botMessage.classList.add('message', 'bot-message');
+    botMessage.textContent = data.reply;
+    chatMessages.appendChild(botMessage);
+
+    // Scroll to bottom
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  } catch (error) {
+    console.error(error);
+  }
+});

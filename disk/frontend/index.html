@@ -8,22 +8,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
+
+
     <header>
         <nav>
+            <!-- <div class="logo"> -->
+                <!-- <img src="logo.png" alt="Root & Ripple Logo"> -->
+            <!-- </div> -->
             <a href="#" class="logo">Root <span>&</span> Ripple</a>
             <ul class="links">
                 <li class="active"><a href="#home">Home</a></li>
                 <li><a href="#about">About Us</a></li>
                 <li><a href="#product">Product & Services</a></li>
+                <!-- <li><a href="#services">Services</a></li> -->
                 <li><a href="#reviews">Reviews</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <button type="button"><a href="#login">Log in</a></button>
+            <!-- <button type="button">Register</button> -->
         </nav>
     </header>
 
-    <div id="home" class="hero">
+
+    <div id= "home" class="hero">
         <div class="container">
             <div class="div-text">
                 <h1>WE INTEGRATE</h1>
@@ -34,17 +43,29 @@
         </div>
     </div>
 
-    <section id="about" class="about-hero">
+
+
+
+    <section id= "about" class="about-hero">
         <div class="hero-overlay">
             <h1>About Root & Ripple</h1>
             <p class="tagline">Pioneering the Future of Energy</p>
-            <p class="description">Root & Ripple is an innovative energy solutions company headquartered at Alexandria STEM School. We are committed to revolutionizing renewable energy by integrating advanced technology into everyday household and commercial products.</p>
+            <p class="description">Root & Ripple is an innovative energy solutions company headquartered at Alexandria STEM School. We are committed to revolutionizing renewable energy by 
+                integrating advanced technology into everyday household and commercial products. Our mission is to provide sustainable energy solutions that empower individuals and businesses to 
+                reduce electricity consumption, lower costs, and contribute to a greener planet.  We envision a future where energy efficiency is seamlessly integrated into daily life. By harnessing 
+                cutting-edge renewable energy sources, we aim to redefine how people interact 
+                with energy-efficient solutions in their homes, offices, and commercial spaces.  
+                .</p>
             <button id="learnMoreBtn">Learn More</button>
         </div>
         <div class="hero-glow"></div>
     </section>
 
-    <div id="contact" class="contact-hero">
+    <div class="glow-effect"></div>
+
+
+
+    <div id= "contact" class="contact-hero">
         <div class="containerx">
             <h1>Contact</h1>
             <p>We'd love to hear from you! Reach out to us for any inquiries or collaborations.</p>
@@ -57,7 +78,7 @@
                 <h2>Get in Touch</h2>
                 <p>Feel free to contact us via email, phone, or visit our office.</p>
                 <ul>
-                    <li><i class="fas fa-envelope"></i> Email: Alexsch@stemalex.moe.edu.eg</li>
+                    <li><i class="fas fa-envelope"></i> Email: Email: Alexsch@stemalex.moe.edu.eg</li>
                     <li><i class="fas fa-phone"></i> Phone: +20 10 65682294</li>
                     <li><i class="fas fa-map-marker-alt"></i> Address: Alexandia STEM School, New Borg El-arab City, Alexandria Governorate</li>
                 </ul>
@@ -70,7 +91,12 @@
                 </div>
                 <div class="map">
                     <h2>Our Location</h2>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3424.632204985799!2d29.58925192392066!3d30.868970779034747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145f7d594fbcea4f%3A0x154d9a404be55624!2sAlexandria%20STEM%20School!5e0!3m2!1sar!2seg!4v1742528278775!5m2!1sar!2seg" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3424.632204985799!2d29.58925192392066!3d30.868970779034747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.
+                    1!3m3!1m2!1s0x145f7d594fbcea4f%3A0x154d9a404be55624!2sAlexandria%20STEM%20School!5e0!3m2!1sar!2seg!4v1742528278775!5m2!1sar!2seg"
+                     style="border:0;" 
+                     allowfullscreen="" 
+                     loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
             <div class="contact-form">
@@ -98,7 +124,11 @@
         </div>
     </section>
 
-    <div id="login" class="login-page">
+
+
+
+
+    <div id= "login" class="login-page">
         <div class="login-container">
             <div class="heading-line"></div>
             <h2>LOG IN</h2>
@@ -142,7 +172,10 @@
                 Don't have an account? <a href="#" id="toggleLink">Register here</a>
             </p>
         </div>
+
+        <script src="script.js"></script>
     </div>
+
 
     <footer class="footer">
         <div class="footer-content">
@@ -177,44 +210,19 @@
             <p>&copy; 2025 Root & Ripple. All rights reserved.</p>
         </div>
     </footer>
-
-  <!-- Chatbase AI Widget -->
-<script>
-  (function(){
-    if(!window.chatbase||window.chatbase("getState")!=="initialized"){
-      window.chatbase=(...arguments)=>{
-        if(!window.chatbase.q){window.chatbase.q=[]}
-        window.chatbase.q.push(arguments)
-      };
-      window.chatbase=new Proxy(window.chatbase,{
-        get(target,prop){
-          if(prop==="q"){return target.q}
-          return(...args)=>target(prop,...args)
-        }
-      })
-    }
-    const onLoad=function(){
-      const script=document.createElement("script");
-      script.src="https://www.chatbase.co/embed.min.js";
-      script.id="a8x2aNtBaMl_4_tRFcmlX"; // DON'T CHANGE THIS ID
-      script.domain="www.chatbase.co";
-      document.body.appendChild(script)
-    };
-    if(document.readyState==="complete"){onLoad()}
-    else{window.addEventListener("load",onLoad)}
-  })();
-</script>
-
-<script>
-  window.chatbase('config', {
-    chatboxTitle: 'RootNRipple Assistant',
-    themeColor: '#FF1010', // Red color like your logo
-    welcomeMessage: 'Welcome to RootNRipple! Ask me anything.',
-    fontSize: '16px',
-    bubbleBackground: '#000000', // Black bubble
-    bubbleTextColor: '#FFFFFF' // White text
-  });
-</script>
-    <script src="script.js"></script>
+  <!-- Chat Widget -->
+    <div id="chat-widget">
+      <div id="chat-header">
+        <span>AI Assistant</span>
+        <button id="close-chat">×</button>
+      </div>
+      <div id="chat-body">
+        <div id="chat-messages"></div>
+      </div>
+      <div id="chat-input">
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-btn">Send</button>
+      </div>
+    </div>
 </body>
 </html>
