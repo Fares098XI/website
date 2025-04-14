@@ -7,11 +7,16 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <a href="#" class="logo">Root <span>&</span> Ripple</a>
+            <!-- <a class="logo-image" href="#">
+                <img src="logox.png" alt="logo" width="200" height="150"> -->
             <ul class="links">
                 <li class="active"><a href="#home">Home</a></li>
                 <li><a href="#about">About Us</a></li>
@@ -29,7 +34,7 @@
                 <h1>WE INTEGRATE</h1>
                 <span>TECHNOLOGY & ENERGY</span>
                 <p>At Root & Ripple, we harness green energy through innovative recycling, transforming waste into sustainable solutions for a cleaner planet.</p>
-                <button>GET STARTED</button>
+                <button type="button"><a href="#about">GET STARTED</a></button>
             </div>
         </div>
     </div>
@@ -38,11 +43,493 @@
         <div class="hero-overlay">
             <h1>About Root & Ripple</h1>
             <p class="tagline">Pioneering the Future of Energy</p>
-            <p class="description">Root & Ripple is an innovative energy solutions company headquartered at Alexandria STEM School. We are committed to revolutionizing renewable energy by integrating advanced technology into everyday household and commercial products.</p>
+            <p class="description">Root & Ripple is an innovative energy solutions company headquartered at STEM Alexandria School. We are committed to revolutionizing renewable energy by integrating advanced 
+                technology into everyday household and commercial products. Our mission is to provide sustainable energy solutions that empower individuals and businesses to reduce electricity consumption, 
+                lower costs, and contribute to a greener planet. <br>
+                We envision a future where energy efficiency is seamlessly integrated into daily life. By harnessing cutting-edge renewable energy sources, we aim 
+                to redefine how people interact with energy-efficient solutions in their homes, offices, and commercial spaces.   </p>
             <button id="learnMoreBtn">Learn More</button>
         </div>
         <div class="hero-glow"></div>
     </section>
+        <!-- Who We Are Section -->
+        <!-- <section id="who-we-are" class="who-we-are">
+            <div class="content">
+                <div class="image">
+                    <img src="futuristic city.jpg" alt="Futuristic City">
+                </div>
+                <div class="text">
+                    <h2>Innovating the Way We Power the World</h2>
+                    <p>Root & Ripple is a forward-thinking technology company dedicated to revolutionizing energy generation and distribution through cutting-edge innovations. We are committed to reshaping the energy landscape, ensuring sustainable, efficient, and intelligent power solutions that drive progress while minimizing environmental impact.</p>
+                    <div class="key-points">
+                        <div class="point">
+                            <i class="fas fa-bolt"></i>
+                            <span>Disruptive Technology</span>
+                        </div>
+                        <div class="point">
+                            <i class="fas fa-leaf"></i>
+                            <span>Sustainability</span>
+                        </div>
+                        <div class="point">
+                            <i class="fas fa-microchip"></i>
+                            <span>Future-Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </section>
+    
+        <!-- Our Journey Section -->
+        <section id="our-journey" class="our-journey">
+            <h2>Our Journey</h2>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="event-marker"></div>
+                    <div class="event-content">
+                        <h3>The Begining - A Student vision</h3>
+                        <p>We wanted to really make a change and invent sustainable solutions.</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-marker"></div>
+                    <div class="event-content">
+                        <h3>One Goal - Team was formed</h3>
+                        <p>A team dedicated to reach one goal which is to make full use of energy.</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-marker"></div>
+                    <div class="event-content">
+                        <h3>First miracle - ReGenX was launched</h3>
+                        <p>Our new energy systems set new industry standards and proved that we are the future.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Core Values Section -->
+        <section id="core-values" class="core-values">
+            <h2>What Drives Us</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Innovation</h3>
+                    <p>Pushing boundaries in energy solutions.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Sustainability</h3>
+                    <p>A greener planet with smarter energy.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-microchip"></i>
+                    <h3>Future-Ready</h3>
+                    <p>Merging AI with energy transformation.</p>
+                </div>
+            </div>
+        </section>
+    
+    </div>
+
+
+
+    <div class="producty" id="product">
+        <section class="herox-section">
+            <div class="herox-content">
+                <h1 class="neon-text">ENERGY-GENERATING SMART CURTAINS</h1>
+                <p class="subtitle">Harness the power of sunlight and motion to reduce your energy bills</p>
+                <button class="cyberpunk-btn">EXPLORE TECH SPECS</button>
+            </div>
+            <div class="product-visualization">
+                <!-- 3D Model Container -->
+                <div id="product-model"></div>
+                <div class="visualization-controls">
+                    <button class="model-control" data-action="rotate">ROTATE</button>
+                    <button class="model-control" data-action="zoom">ZOOM</button>
+                    <button class="model-control" data-action="material">MATERIAL</button>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Energy Features Grid -->
+        <section class="featuresx-section">
+            <h2 class="sectionx-title">TRIPLE POWER GENERATION SYSTEM</h2>
+            <div class="featuresx-grid">
+                <div class="featurex-card">
+                    <div class="featurex-icon">☀️</div>
+                    <h3>PHOTOVOLTAIC FIBERS</h3>
+                    <p>Solar-reactive threads convert sunlight into electricity</p>
+                    <div class="tech-specs">
+                        <span>Efficiency: 23%</span>
+                        <span>Output: 50W/m²</span>
+                    </div>
+                </div>
+                <div class="featurex-card">
+                    <div class="featurex-icon">⚡</div>
+                    <h3>KINETIC HARVESTING</h3>
+                    <p>Micro-turbines capture energy from curtain movement</p>
+                    <div class="tech-specs">
+                        <span>Efficiency: 15%</span>
+                        <span>Output: 10W/day</span>
+                    </div>
+                </div>
+                <div class="featurex-card">
+                    <div class="featurex-icon">🌡️</div>
+                    <h3>THERMOELECTRIC LAYER</h3>
+                    <p>Generates power from temperature differentials</p>
+                    <div class="tech-specs">
+                        <span>Efficiency: 8%</span>
+                        <span>Output: 5W/Δ10°C</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Product Demonstration -->
+        <section class="demo-section">
+            <div class="demo-content">
+                <h2>SMART HOME INTEGRATION</h2>
+                <p>Our curtains connect seamlessly with your existing smart home ecosystem</p>
+                <ul class="tech-list">
+                    <li>Works with Alexa, Google Home, and HomeKit</li>
+                    <li>Real-time energy monitoring dashboard</li>
+                    <li>Automated light and temperature optimization</li>
+                </ul>
+            </div>
+            <div class="demo-visual">
+                <div class="app-interface">
+                    <!-- Placeholder for app screenshot -->
+                    <div class="phone-mockup">
+                        <div class="screen-content">
+                            <div class="energy-graph"></div>
+                            <div class="app-controls">
+                                <div class="control-btn"></div>
+                                <div class="control-btn"></div>
+                                <div class="control-btn"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+    
+    
+        <!-- Tech Specs Section -->
+        <section class="specs-section">
+            <h2 class="sectionx-title">TECHNICAL SPECIFICATIONS</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <h3>MATERIALS & CONSTRUCTION</h3>
+                    <div class="spec-details">
+                        <div class="spec-item">
+                            <div class="spec-icon">⛓</div>
+                            <div>
+                                <p>Graphene-infused photovoltaic fabric</p>
+                                <p class="spec-value">98% light absorption</p>
+                            </div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-icon">♻</div>
+                            <div>
+                                <p>Recycled polymer frame</p>
+                                <p class="spec-value">100% post-industrial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spec-card">
+                    <h3>POWER PERFORMANCE</h3>
+                    <div class="spec-details">
+                        <div class="spec-item">
+                            <div class="spec-icon">⚡</div>
+                            <div>
+                                <p>Peak power output</p>
+                                <p class="spec-value">65W per panel</p>
+                            </div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-icon">🔋</div>
+                            <div>
+                                <p>Daily energy generation</p>
+                                <p class="spec-value">Up to 500Wh</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spec-card">
+                    <h3>DIMENSIONS & INSTALLATION</h3>
+                    <div class="spec-details">
+                        <div class="spec-item">
+                            <div class="spec-icon">📏</div>
+                            <div>
+                                <p>Standard panel size</p>
+                                <p class="spec-value">36" x 84"</p>
+                            </div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-icon">🏗</div>
+                            <div>
+                                <p>Installation time</p>
+                                <p class="spec-value">Under 30 minutes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Pricing Section -->
+        <section class="pricing-section">
+            <h2 class="sectionx-title">MODULAR PRICING OPTIONS</h2>
+            <div class="pricing-tiers">
+                <div class="price-card">
+                    <h3>RESIDENTIAL</h3>
+                    <div class="price">$249 <span>/panel</span></div>
+                    <ul class="features-list">
+                        <li>Standard photovoltaic fabric</li>
+                        <li>Basic automation</li>
+                        <li>Mobile app control</li>
+                        <button class="order-btn">CONFIGURE</button>
+                    </ul>
+                </div>
+                <div class="price-card featured">
+                    <div class="popular-badge">MOST POPULAR</div>
+                    <h3>PRO</h3>
+                    <div class="price">$399 <span>/panel</span></div>
+                    <ul class="features-list">
+                        <li>Enhanced photovoltaic fabric</li>
+                        <li>Kinetic energy harvesting</li>
+                        <li>Smart home integration</li>
+                        <button class="order-btn">CONFIGURE</button>
+                    </ul>
+                </div>
+                <div class="price-card">
+                    <h3>COMMERCIAL</h3>
+                    <div class="price">Custom</div>
+                    <ul class="features-list">
+                        <li>All Pro features plus</li>
+                        <li>Thermoelectric layer</li>
+                        <li>Enterprise monitoring</li>
+                        <button class="order-btn">REQUEST QUOTE</button>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    
+    
+    
+        <!-- Floating UI Elements -->
+        <div class="floating-particle" style="top:20%; left:10%;"></div>
+        <div class="floating-particle" style="top:70%; left:80%;"></div>
+        <div class="floating-particle" style="top:40%; left:50%;"></div>
+    
+
+    </div>
+
+     <!-- Hero Section -->
+     
+
+
+
+    <div class="reviewy">
+        <section class="hero-section" id="reviews">
+            <div class="containery">
+                <div class="hero-content">
+                    <h1>What Our Customers Say About Smart Curtain</h1>
+                    <p>Real experiences from homeowners, businesses, and sustainability advocates.</p>
+                    
+                    <div class="rating-summary">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <div class="rating-value">4.8</div>
+                        <div class="based-on">Based on 215 reviews</div>
+                    </div>
+                    
+                    <a href="#write-review" class="btn btn-primary">Write a Review</a>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Reviews Section -->
+        <section class="reviews-section">
+            <div class="containery">
+                <div class="section-title">
+                    <h2>Featured Reviews</h2>
+                    <p>Hear from our satisfied customers</p>
+                </div>
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label for="sort-by">Sort by:</label>
+                        <select id="sort-by" class="filter-select">
+                            <option value="highest">Highest Rated</option>
+                            <option value="newest">Newest First</option>
+                            <option value="verified">Verified Buyers</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="category">Category:</label>
+                        <select id="category" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="home">Home Use</option>
+                            <option value="office">Office Use</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="reviews-grid" id="reviews-grid">
+                    <!-- Reviews will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </section>
+    
+        <!-- Customer Photos Section -->
+        <section class="gallery-section">
+            <div class="containery">
+                <div class="section-title">
+                    <h2>See How Smart Curtain Works in Real Homes</h2>
+                    <p>Customer photos from around the world</p>
+                </div>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    <!-- More gallery items will be added by JavaScript -->
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-secondary" id="view-all-photos">View All Photos</button>
+                </div>
+            </div>
+        </section>
+    
+        <!-- Write Review Section -->
+        <section class="write-review" id="write-review">
+            <div class="containery">
+                <div class="section-title">
+                    <h2>Share Your Smart Curtain Experience</h2>
+                    <p>Your feedback helps us improve</p>
+                </div>
+                
+                <form id="review-form" class="review-form">
+                    <div class="form-groupx">
+                        <label>Your Rating</label>
+                        <div class="star-rating">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-groupx">
+                        <label for="review-title">Review Title</label>
+                        <input type="text" id="review-title" placeholder="Summarize your experience">
+                    </div>
+                    
+                    <div class="form-groupx">
+                        <label for="review-content">Your Review</label>
+                        <textarea id="review-content" placeholder="Tell others about your experience with our Smart Curtain"></textarea>
+                    </div>
+                    
+                    <div class="form-groupx">
+                        <label>Would you recommend this product?</label>
+                        <div class="recommend-toggle">
+                            <button type="button" class="toggle-option active">Yes</button>
+                            <button type="button" class="toggle-option">No</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-groupx">
+                        <label>Upload Photos (Optional)</label>
+                        <div class="upload-area" id="upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop photos here or click to browse</p>
+                            <input type="file" id="file-upload" multiple accept="image/*">
+                        </div>
+                        <div class="preview-container" id="preview-container"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary submit-review">Submit Review</button>
+                </form>
+            </div>
+        </section>
+    
+        <!-- Customer Support Section -->
+        <!-- <section class="support-section">
+            <div class="container">
+                <div class="support-content">
+                    <h3>Need Help? We're Here for You!</h3>
+                    <div class="support-options">
+                        <div class="support-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>support@smartcurtain.com</span>
+                        </div>
+                        <div class="support-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+123-456-7890</span>
+                        </div>
+                        <div class="support-item">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>Live Chat (24/7)</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-secondary">View FAQs</a>
+                </div>
+            </div>
+        </section> -->
+    
+        <!-- Why Choose Section -->
+        <section class="why-choose">
+            <div class="containery">
+                <div class="section-title">
+                    <h2>Why Customers Love Smart Curtain</h2>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Energy-Saving</h3>
+                        <p>Converts solar & wind energy into power for your home</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-leaf"></i>
+                        <h3>Eco-Friendly</h3>
+                        <p>Made from 100% sustainable materials</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-home"></i>
+                        <h3>Smart Integration</h3>
+                        <p>Works with Alexa, Google Home and mobile apps</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-paint-brush"></i>
+                        <h3>Sleek Design</h3>
+                        <p>Enhances the look of any room</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <a href="#" class="btn btn-primary">Order Your Smart Curtain Now</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+     
 
     <div id="contact" class="contact-hero">
         <div class="containerx">
@@ -196,7 +683,7 @@
     const onLoad=function(){
       const script=document.createElement("script");
       script.src="https://www.chatbase.co/embed.min.js";
-      script.id="a8x2aNtBaMl_4_tRFcmlX"; // DON'T CHANGE THIS ID
+      script.id="a8x2aNtBaMl_4_tRFcmlX"; // secret key which i put in gitignore
       script.domain="www.chatbase.co";
       document.body.appendChild(script)
     };
@@ -208,7 +695,7 @@
 <script>
   window.chatbase('config', {
     chatboxTitle: 'RootNRipple Assistant',
-    themeColor: '#FF1010', // Red color like your logo
+    themeColor: '#FF1010', //red color
     welcomeMessage: 'Welcome to RootNRipple! Ask me anything.',
     fontSize: '16px',
     bubbleBackground: '#000000', // Black bubble
