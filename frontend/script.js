@@ -444,84 +444,127 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(file);
         }
     }
-// 3D Model Initialization
-let scene, camera, renderer, controls;
+// 3D Product Model Initialization
+let scene, camera, renderer, controls, productModel;
 
 function init3DModel() {
-    // 1. Create scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000a19);
-    
-    // 2. Create camera
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-    
-    // 3. Create renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(document.getElementById('product-model').clientWidth, document.getElementById('product-model').clientHeight);
-
-    // ======== ADD LIGHTS HERE ======== //
-    const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Bright directional light
-    directionalLight.position.set(1, 1, 1);
-    scene.add(directionalLight);
-    
-    // 4. Load model
-    const loader = new THREE.GLTFLoader();
-    const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
-   // In script.js, line ~110, replace with:
-    const loader = new THREE.GLTFLoader();
-    loader.load(
-        'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb',
-    (gltf) => {
-        productModel = gltf.scene;
-        productModel.scale.set(0.5, 0.5, 0.5);
-        scene.add(productModel);
+    try {
+        // 1. Create scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000a19);
         
-        // Center model
-        const box = new THREE.Box3().setFromObject(productModel);
-        const center = box.getCenter(new THREE.Vector3());
-        productModel.position.sub(center);
+        // 2. Create camera
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
         
-        // Add to DOM
-        document.getElementById('product-model').appendChild(renderer.domElement);
-    },
-    undefined,
-    (error) => {
-        console.error('Error loading model:', error);
-        // Fallback cube
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        productModel = new THREE.Mesh(geometry, material);
-        scene.add(productModel);
-        document.getElementById('product-model').appendChild(renderer.domElement);
-    }
-);
-    
-    // 5. Add controls
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    
-    // 6. Animation loop
-    function animate() {
-        requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
-    }
-    animate();
-    
-    // 7. Handle window resize
-    window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
+        // 3. Create renderer
+        renderer = new THREE.WebGLRenderer({ 
+            antialias: true,
+            powerPreference: "high-performance"
+        });
+        const container = document.getElementById('product-model');
         renderer.setSize(container.clientWidth, container.clientHeight);
-    });
-}
-// Initialize when DOM loads
-document.addEventListener('DOMContentLoaded', init3DModel);
+        
+        // 4. Add lighting (CRUCIAL FOR VISIBILITY)
+        const ambientLight = new THREE.AmbientLight(0x404040, 2.5); // Soft overall light
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Main light source
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+        
+        const backLight = new THREE.DirectionalLight(0xffffff, 0.5); // Accent light
+        backLight.position.set(-5, -5, -5);
+        scene.add(backLight);
 
+        // 5. Show loading message
+        container.innerHTML = '<div style="color:white;font-family:sans-serif;text-align:center;padding-top:200px">Loading 3D model...</div>';
+
+        // 6. Load model
+        const loader = new THREE.GLTFLoader();
+        const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
+        
+        console.log("Loading model from:", modelUrl);
+        
+        loader.load(modelUrl, 
+            (gltf) => {
+                // Success callback
+                productModel = gltf.scene;
+                
+                // Scale and position model
+                productModel.scale.set(0.5, 0.5, 0.5);
+                productModel.position.set(0, -1, 0);
+                scene.add(productModel);
+                
+                // Center camera on model
+                const box = new THREE.Box3().setFromObject(productModel);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                
+                camera.position.z = size.length() * 1.5;
+                controls.target.copy(center);
+                controls.update();
+                
+                // Add renderer to DOM
+                container.innerHTML = '';
+                container.appendChild(renderer.domElement);
+                
+                console.log("Model loaded successfully!");
+            },
+            undefined, // Progress callback (optional)
+            (error) => {
+                console.error("Error loading model:", error);
+                
+                // Fallback: Create a red cube
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+                productModel = new THREE.Mesh(geometry, material);
+                scene.add(productModel);
+                
+                container.innerHTML = '';
+                container.appendChild(renderer.domElement);
+                
+                console.log("Showing fallback cube");
+            }
+        );
+        
+        // 7. Add controls
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        
+        // 8. Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+        
+        // 9. Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+    } catch (error) {
+        console.error("3D Initialization Error:", error);
+        document.getElementById('product-model').innerHTML = `
+            <div style="color:red;padding:20px;font-family:sans-serif">
+                <h3>3D Viewer Error</h3>
+                <p>${error.message}</p>
+                <p>Please check console for details</p>
+            </div>`;
+    }
+}
+
+// Initialize when DOM is fully loaded
+if (document.readyState === 'complete') {
+    init3DModel();
+} else {
+    window.addEventListener('DOMContentLoaded', init3DModel);
+}
 function createFallbackModel() {
     console.log("Creating fallback model");
     const geometry = new THREE.BoxGeometry(1, 1, 1);
