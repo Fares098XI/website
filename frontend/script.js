@@ -448,30 +448,33 @@ document.addEventListener('DOMContentLoaded', function() {
 let scene, camera, renderer, controls;
 
 function init3DModel() {
-    // 1. Basic Three.js setup
-    const container = document.getElementById('product-model');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    // 1. Create scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000a19);
     
-    // 2. Set up renderer
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setClearColor(0x000000, 1); // Black background
-    container.appendChild(renderer.domElement);
+    // 2. Create camera
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
     
-    // 3. Add basic lighting
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(1, 1, 1);
-    scene.add(light);
-    scene.add(new THREE.AmbientLight(0x404040));
+    // 3. Create renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(document.getElementById('product-model').clientWidth, document.getElementById('product-model').clientHeight);
+
+    // ======== ADD LIGHTS HERE ======== //
+    const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
+    scene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Bright directional light
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
     
     // 4. Load model
     const loader = new THREE.GLTFLoader();
     const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
    // In script.js, line ~110, replace with:
-const loader = new THREE.GLTFLoader();
-loader.load(
-    'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb',
+    const loader = new THREE.GLTFLoader();
+    loader.load(
+        'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb',
     (gltf) => {
         productModel = gltf.scene;
         productModel.scale.set(0.5, 0.5, 0.5);
