@@ -487,7 +487,7 @@ function init3DModel() {
     
     // Load your Smart_curtains.glb model
     loader.load(
-        'path/to/Smart_curtains.glb', // Update this path to your model's location
+        'frontend/Smart_curtains.glb', // Update this path to your model's location
         function (gltf) {
             productModel = gltf.scene;
             
