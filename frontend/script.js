@@ -452,6 +452,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // 3D Product Model Initialization
 let productModel, camera, scene, renderer, controls;
 
+// 3D Product Model Initialization
+let productModel, camera, scene, renderer, controls;
+
 function init3DModel() {
     // Create scene
     scene = new THREE.Scene();
@@ -471,27 +474,53 @@ function init3DModel() {
     const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0x00f0ff, 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
     
-    const pointLight = new THREE.PointLight(0xff003c, 1, 100);
+    const pointLight = new THREE.PointLight(0x00f0ff, 1, 100);
     pointLight.position.set(5, 5, 5);
     scene.add(pointLight);
     
-    // Create placeholder geometry (replace with actual model later)
-    const geometry = new THREE.BoxGeometry(2, 3, 0.1);
-    const material = new THREE.MeshPhongMaterial({ 
-        color: 0x0066cc,
-        emissive: 0x003366,
-        emissiveIntensity: 0.2,
-        specular: 0x00f0ff,
-        shininess: 30,
-        wireframe: false
-    });
+    // Add GLTFLoader
+    const loader = new THREE.GLTFLoader();
     
-    productModel = new THREE.Mesh(geometry, material);
-    scene.add(productModel);
+    // Load your Smart_curtains.glb model
+    loader.load(
+        'path/to/Smart_curtains.glb', // Update this path to your model's location
+        function (gltf) {
+            productModel = gltf.scene;
+            
+            // Scale and position the model if needed
+            productModel.scale.set(0.5, 0.5, 0.5);
+            productModel.position.set(0, -1, 0);
+            
+            // Add the model to the scene
+            scene.add(productModel);
+            
+            // Adjust camera to fit the model
+            const box = new THREE.Box3().setFromObject(productModel);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            
+            camera.position.z = size.length() * 1.5;
+            controls.target.copy(center);
+            controls.update();
+        },
+        undefined, // Progress callback (optional)
+        function (error) {
+            console.error('Error loading model:', error);
+            
+            // Fallback: Create a placeholder if model fails to load
+            const geometry = new THREE.BoxGeometry(2, 3, 0.1);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x0066cc,
+                wireframe: true
+            });
+            productModel = new THREE.Mesh(geometry, material);
+            scene.add(productModel);
+        }
+    );
     
     // Add OrbitControls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -526,8 +555,14 @@ function init3DModel() {
                     
                 case 'material':
                     // Toggle between solid and wireframe view
-                    productModel.material.wireframe = !productModel.material.wireframe;
-                    this.classList.toggle('active');
+                    if (productModel) {
+                        productModel.traverse(function(child) {
+                            if (child.isMesh) {
+                                child.material.wireframe = !child.material.wireframe;
+                            }
+                        });
+                        this.classList.toggle('active');
+                    }
                     break;
             }
         });
@@ -539,7 +574,6 @@ function init3DModel() {
     // Start animation loop
     animate();
 }
-
 function onWindowResize() {
     camera.aspect = document.getElementById('product-model').clientWidth / document.getElementById('product-model').clientHeight;
     camera.updateProjectionMatrix();
