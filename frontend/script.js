@@ -469,35 +469,32 @@ function init3DModel() {
     scene.add(directionalLight);
 
     // 5. Load model
-    const loader = new THREE.GLTFLoader();
-    const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
+   // Replace your model loading code with:
+const loader = new THREE.GLTFLoader();
+const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
+
+loader.load(modelUrl, (gltf) => {
+    const model = gltf.scene;
+    model.scale.set(0.5, 0.5, 0.5);
+    scene.add(model);
     
-    loader.load(
-        modelUrl,
-        (gltf) => {
-            const model = gltf.scene;
-            model.scale.set(0.5, 0.5, 0.5);
-            scene.add(model);
-            
-            // Center model
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            model.position.sub(center);
-            
-            // Add renderer to DOM after load
-            container.appendChild(renderer.domElement);
-        },
-        undefined,
-        (error) => {
-            console.error('Error loading model:', error);
-            // Fallback cube
-            const geometry = new THREE.BoxGeometry();
-            const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-            const cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-            container.appendChild(renderer.domElement);
-        }
-    );
+    // Center the model
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    model.position.sub(center);
+    
+    // Add lights if needed
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(1, 1, 1);
+    scene.add(light);
+}, undefined, (error) => {
+    console.error('Error loading model:', error);
+    // Fallback cube
+    const geo = new THREE.BoxGeometry();
+    const mat = new THREE.MeshBasicMaterial({color: 0xff0000});
+    const cube = new THREE.Mesh(geo, mat);
+    scene.add(cube);
+});
     
     // 6. Add controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
