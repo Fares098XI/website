@@ -448,74 +448,68 @@ document.addEventListener('DOMContentLoaded', function() {
 let scene, camera, renderer, controls;
 
 function init3DModel() {
-    // 1. Create scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000a19);
-    
-    // 2. Create camera
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-    
-    // 3. Create renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    // 1. Basic Three.js setup
     const container = document.getElementById('product-model');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    
+    // 2. Set up renderer
     renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setClearColor(0x000000, 1); // Black background
+    container.appendChild(renderer.domElement);
     
-    // 4. Add lights
-    const ambientLight = new THREE.AmbientLight(0x404040, 2);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 1, 1);
-    scene.add(directionalLight);
-
-    // 5. Load model
-   // Replace your model loading code with:
-const loader = new THREE.GLTFLoader();
-const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
-
-loader.load(modelUrl, (gltf) => {
-    const model = gltf.scene;
-    model.scale.set(0.5, 0.5, 0.5);
-    scene.add(model);
-    
-    // Center the model
-    const box = new THREE.Box3().setFromObject(model);
-    const center = box.getCenter(new THREE.Vector3());
-    model.position.sub(center);
-    
-    // Add lights if needed
+    // 3. Add basic lighting
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(1, 1, 1);
     scene.add(light);
-}, undefined, (error) => {
-    console.error('Error loading model:', error);
-    // Fallback cube
-    const geo = new THREE.BoxGeometry();
-    const mat = new THREE.MeshBasicMaterial({color: 0xff0000});
-    const cube = new THREE.Mesh(geo, mat);
-    scene.add(cube);
-});
+    scene.add(new THREE.AmbientLight(0x404040));
     
-    // 6. Add controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
+    // 4. Load model
+    const loader = new THREE.GLTFLoader();
+    const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
     
-    // 7. Handle resize
-    window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
+    loader.load(modelUrl, (gltf) => {
+        const model = gltf.scene;
+        model.scale.set(0.5, 0.5, 0.5);
+        scene.add(model);
+        
+        // Center model
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        model.position.sub(center);
+        
+        // Position camera
+        camera.position.z = box.getSize(new THREE.Vector3()).length() * 1.5;
+    }, undefined, (error) => {
+        console.error('Error loading model:', error);
+        // Fallback cube
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+        camera.position.z = 5;
     });
     
-    // 8. Animation loop
+    // 5. Add controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    
+    // 6. Animation loop
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
         renderer.render(scene, camera);
     }
     animate();
+    
+    // 7. Handle window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
 }
-
 // Initialize when DOM loads
 document.addEventListener('DOMContentLoaded', init3DModel);
 
