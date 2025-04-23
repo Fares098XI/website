@@ -151,9 +151,10 @@ function renderReviews() {
 
 // ==================== GALLERY SYSTEM ====================
 const galleryImages = [
-    "https://images.unsplash.com/photo-1513519245088-0e12902e5a38",
-    "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
+     "https://images.unsplash.com/photo-1513519245088-0e12902e5a38",
+     "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
+     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
+     "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
 ];
 
 function renderGallery() {
