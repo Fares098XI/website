@@ -444,119 +444,83 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(file);
         }
     }
-// Test this in your browser console
-fetch('https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb')
-  .then(response => {
-    if (!response.ok) throw new Error('Failed to fetch');
-    return response.blob();
-  })
-  .then(blob => console.log('File exists! Size:', blob.size, 'bytes'))
-  .catch(error => console.error('Error loading file:', error));
-    
+// 3D Model Initialization
+let scene, camera, renderer, controls;
+
 function init3DModel() {
-    console.log("Initializing 3D model...");
-    
     // 1. Create scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000a19);
     
     // 2. Create camera
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
     
     // 3. Create renderer
-    renderer = new THREE.WebGLRenderer({ 
-        antialias: true,
-        alpha: true // Add transparency
-    });
+    renderer = new THREE.WebGLRenderer({ antialias: true });
     const container = document.getElementById('product-model');
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
     
-    // 4. Set up loading manager with proper callbacks
-    const loadingManager = new THREE.LoadingManager(
-        () => {
-            console.log("Loading complete!");
-            container.innerHTML = '';
-            container.appendChild(renderer.domElement);
-        },
-        (url, loaded, total) => {
-            console.log(`Loading progress: ${loaded}/${total}`);
-        },
-        (url) => {
-            console.error(`Error loading ${url}`);
-            container.innerHTML = '<div class="loading-error">Failed to load 3D model</div>';
-            createFallbackModel();
-        }
-    );
-
-    // Show loading message
-    container.innerHTML = '<div class="loading">Loading 3D model...</div>';
-
-    // 5. Add lights (crucial for visibility)
-    const ambientLight = new THREE.AmbientLight(0x404040, 2); // Increased intensity
+    // 4. Add lights
+    const ambientLight = new THREE.AmbientLight(0x404040, 2);
     scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
-    directionalLight.position.set(5, 5, 5);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
-    
-    // 6. Initialize loader
-    const loader = new THREE.GLTFLoader(loadingManager);
-    
-    // 7. Load model - USE RAW GITHUB URL
+
+    // 5. Load model
+    const loader = new THREE.GLTFLoader();
     const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
-    console.log(`Loading model from: ${modelUrl}`);
     
     loader.load(
         modelUrl,
         (gltf) => {
-            console.log("Model loaded successfully!");
-            productModel = gltf.scene;
+            const model = gltf.scene;
+            model.scale.set(0.5, 0.5, 0.5);
+            scene.add(model);
             
-            // Check if model has contents
-            if (productModel.children.length === 0) {
-                console.warn("Model loaded but appears empty!");
-                createFallbackModel();
-                return;
-            }
+            // Center model
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            model.position.sub(center);
             
-            // Adjust model scale and position
-            productModel.scale.set(0.5, 0.5, 0.5);
-            productModel.position.set(0, -1, 0);
-            
-            // Add model to scene
-            scene.add(productModel);
-            
-            // Set up camera to view entire model
-            const bbox = new THREE.Box3().setFromObject(productModel);
-            const center = bbox.getCenter(new THREE.Vector3());
-            const size = bbox.getSize(new THREE.Vector3());
-            
-            camera.position.z = size.length() * 2;
-            controls.target.copy(center);
-            controls.update();
-            
-            console.log("Model dimensions:", size);
+            // Add renderer to DOM after load
+            container.appendChild(renderer.domElement);
         },
         undefined,
         (error) => {
-            console.error("Error loading model:", error);
-            loadingManager.onError(modelUrl); // Trigger error handler
+            console.error('Error loading model:', error);
+            // Fallback cube
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            container.appendChild(renderer.domElement);
         }
     );
     
-    // 8. Add controls
+    // 6. Add controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
     
-    // 9. Handle window resize
-    window.addEventListener('resize', onWindowResize);
+    // 7. Handle resize
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
     
-    // 10. Start animation loop
+    // 8. Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
     animate();
 }
+
+// Initialize when DOM loads
+document.addEventListener('DOMContentLoaded', init3DModel);
 
 function createFallbackModel() {
     console.log("Creating fallback model");
