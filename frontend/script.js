@@ -1,18 +1,17 @@
-// Toggle between Login and Register forms
+// ==================== LOGIN/REGISTER TOGGLE ====================
 const toggleLink = document.getElementById('toggleLink');
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 
-toggleLink.addEventListener('click', function(event) {
+function handleFormToggle(event) {
     event.preventDefault();
-
+    
     if (loginForm.classList.contains('active-form')) {
         // Switch to Register form
         loginForm.classList.remove('active-form');
         loginForm.classList.add('hidden-form');
         registerForm.classList.remove('hidden-form');
         registerForm.classList.add('active-form');
-        toggleLink.textContent = 'Login here';
         document.querySelector('.toggle-form').innerHTML = 'Already have an account? <a href="#" id="toggleLink">Login here</a>';
     } else {
         // Switch to Login form
@@ -20,15 +19,14 @@ toggleLink.addEventListener('click', function(event) {
         registerForm.classList.add('hidden-form');
         loginForm.classList.remove('hidden-form');
         loginForm.classList.add('active-form');
-        toggleLink.textContent = 'Register here';
         document.querySelector('.toggle-form').innerHTML = 'Don\'t have an account? <a href="#" id="toggleLink">Register here</a>';
     }
+    
+    // Re-attach event listener to the new link
+    document.getElementById('toggleLink').addEventListener('click', handleFormToggle);
+}
 
-    // Re-attach the event listener to the new link
-    document.getElementById('toggleLink').addEventListener('click', arguments.callee);
-});
-
-// Form submission handling
+// ==================== FORM SUBMISSIONS ====================
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const email = document.getElementById('email').value;
@@ -36,7 +34,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     if (email && password) {
         alert('Login successful!');
-        // Add login logic here
+        // Add actual login logic here
     } else {
         alert('Please fill out all fields.');
     }
@@ -53,7 +51,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     if (firstName && lastName && regEmail && regPassword && confirmPassword) {
         if (regPassword === confirmPassword) {
             alert('Registration successful!');
-            // Add registration logic here
+            // Add actual registration logic here
         } else {
             alert('Passwords do not match.');
         }
@@ -62,501 +60,292 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     }
 });
 
-// Initialize Chatbase AI Widget
-(function(){
-    if(!window.chatbase||window.chatbase("getState")!=="initialized"){
-        window.chatbase=(...arguments)=>{
-            if(!window.chatbase.q){window.chatbase.q=[]}
-            window.chatbase.q.push(arguments)
-        };
-        window.chatbase=new Proxy(window.chatbase,{
-            get(target,prop){
-                if(prop==="q"){return target.q}
-                return(...args)=>target(prop,...args)
-            }
-        })
-    }
-    const onLoad=function(){
-        const script=document.createElement("script");
-        script.src="https://www.chatbase.co/embed.min.js";
-        script.id="a8x2aNtBaMl_4_tRFcmlX"; // Your Chatbase script ID
-        script.domain="www.chatbase.co";
-        document.body.appendChild(script)
-    };
-    if(document.readyState==="complete"){onLoad()}
-    else{window.addEventListener("load",onLoad)}
-})();
-
-// Optional: Remove old chat widget code if no longer needed
-const oldChatWidget = document.getElementById('chat-widget');
-if (oldChatWidget) {
-    oldChatWidget.remove();
-}
-const oldChatToggle = document.getElementById('chat-toggle');
-if (oldChatToggle) {
-    oldChatToggle.remove();
-}
-document.addEventListener('DOMContentLoaded', function() {
-    // Sample review data
-    const reviews = [
-        {
-            id: 1,
-            userName: "Sarah L.",
-            userAvatar: "https://randomuser.me/api/portraits/women/43.jpg",
-            isVerified: true,
-            date: "March 18, 2025",
-            rating: 5,
-            title: "A Must-Have for Smart Homes!",
-            content: "I was looking for an energy-saving solution, and this curtain exceeded my expectations! The design is sleek, and it fits perfectly into my smart home setup. The app is intuitive, and installation was a breeze. Would highly recommend!",
-            pros: ["Saves energy", "Beautiful design", "Easy to use"],
-            cons: ["Limited color options"],
-            helpfulCount: 47,
-            hasReply: true,
-            reply: {
-                author: "Smart Curtain Team",
-                date: "March 19, 2025",
-                content: "Thank you, Sarah! We're thrilled you love it. We're working on adding more color options soon!"
-            }
-        },
-        {
-            id: 2,
-            userName: "Michael T.",
-            userAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-            isVerified: true,
-            date: "February 28, 2025",
-            rating: 4,
-            title: "Great investment for energy savings",
-            content: "After 3 months of use, I've noticed a significant reduction in my electricity bill. The curtains are well-made and the automatic adjustment based on sunlight is brilliant. Only wish the mobile app had more customization options.",
-            pros: ["Noticeable energy savings", "High quality materials", "Smart features"],
-            cons: ["App could be better", "Pricey"],
-            helpfulCount: 32,
-            hasReply: false
-        },
-        {
-            id: 3,
-            userName: "David K.",
-            userAvatar: "https://randomuser.me/api/portraits/men/76.jpg",
-            isVerified: true,
-            date: "April 5, 2025",
-            rating: 5,
-            title: "Perfect for my home office",
-            content: "These curtains have transformed my workspace! The light control is perfect for reducing glare on my screens, and I love that they generate power while doing it. Installation was straightforward with the included guide.",
-            pros: ["Excellent light control", "Easy installation", "Quiet operation"],
-            cons: ["None so far"],
-            helpfulCount: 18,
-            hasReply: true,
-            reply: {
-                author: "Smart Curtain Team",
-                date: "April 6, 2025",
-                content: "Thanks for your feedback! We're glad they're working well in your home office."
-            }
+// ==================== REVIEW SYSTEM ====================
+const reviews = [
+    {
+        id: 1,
+        userName: "Sarah L.",
+        userAvatar: "https://randomuser.me/api/portraits/women/43.jpg",
+        isVerified: true,
+        date: "March 18, 2025",
+        rating: 5,
+        title: "A Must-Have for Smart Homes!",
+        content: "I was looking for an energy-saving solution, and this curtain exceeded my expectations! The design is sleek, and it fits perfectly into my smart home setup. The app is intuitive, and installation was a breeze. Would highly recommend!",
+        pros: ["Saves energy", "Beautiful design", "Easy to use"],
+        cons: ["Limited color options"],
+        helpfulCount: 47,
+        hasReply: true,
+        reply: {
+            author: "Smart Curtain Team",
+            date: "March 19, 2025",
+            content: "Thank you, Sarah! We're thrilled you love it. We're working on adding more color options soon!"
         }
-    ];
+    },
+    // Add more reviews as needed
+];
 
-    // Sample gallery images
-    const galleryImages = [
-        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38",
-        "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
-    ];
-
-    // DOM Elements
+function renderReviews() {
     const reviewsGrid = document.getElementById('reviews-grid');
+    reviewsGrid.innerHTML = '';
+    
+    reviews.forEach((review, index) => {
+        const reviewCard = document.createElement('div');
+        reviewCard.className = 'review-card';
+        reviewCard.style.animationDelay = `${index * 0.1}s`;
+        
+        // Generate stars HTML
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            starsHtml += i <= review.rating 
+                ? '<i class="fas fa-star"></i>' 
+                : '<i class="far fa-star"></i>';
+        }
+        
+        // Generate pros/cons HTML
+        const prosHtml = review.pros?.length ? `<ul>${review.pros.map(pro => `<li>${pro}</li>`).join('')}</ul>` : '';
+        const consHtml = review.cons?.length ? `<ul>${review.cons.map(con => `<li>${con}</li>`).join('')}</ul>` : '';
+        
+        // Generate reply HTML if exists
+        const replyHtml = review.hasReply ? `
+            <div class="review-reply">
+                <div class="reply-header">
+                    <i class="fas fa-reply"></i>
+                    ${review.reply.author} • ${review.reply.date}
+                </div>
+                <p>${review.reply.content}</p>
+            </div>
+        ` : '';
+        
+        reviewCard.innerHTML = `
+            <div class="review-header">
+                <img src="${review.userAvatar}" alt="${review.userName}" class="user-avatar">
+                <div class="user-info">
+                    <div class="user-name">
+                        ${review.userName}
+                        ${review.isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+                    </div>
+                    <div class="review-date">${review.date}</div>
+                </div>
+                <div class="review-rating">${starsHtml}</div>
+            </div>
+            <div class="review-body">
+                <h3 class="review-title">${review.title}</h3>
+                <p class="review-content">${review.content}</p>
+                <div class="review-pros-cons">
+                    <div class="pros-cons-list pros-list">
+                        <h4><i class="fas fa-check-circle"></i> Pros</h4>
+                        ${prosHtml}
+                    </div>
+                    <div class="pros-cons-list cons-list">
+                        <h4><i class="fas fa-times-circle"></i> Cons</h4>
+                        ${consHtml}
+                    </div>
+                </div>
+                ${replyHtml}
+            </div>
+        `;
+        
+        reviewsGrid.appendChild(reviewCard);
+    });
+}
+
+// ==================== GALLERY SYSTEM ====================
+const galleryImages = [
+    "https://images.unsplash.com/photo-1513519245088-0e12902e5a38",
+    "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
+    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
+];
+
+function renderGallery() {
     const galleryGrid = document.querySelector('.gallery-grid');
+    galleryGrid.innerHTML = '';
+    
+    galleryImages.forEach(image => {
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item';
+        galleryItem.style.backgroundImage = `url(${image}?auto=format&fit=crop&w=500&q=80)`;
+        galleryItem.innerHTML = '<div class="gallery-overlay"><i class="fas fa-expand"></i></div>';
+        
+        galleryItem.addEventListener('click', () => openLightbox(image));
+        galleryGrid.appendChild(galleryItem);
+    });
+}
+
+function openLightbox(imageUrl) {
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = `
+        <div class="lightbox-content">
+            <span class="close-lightbox">&times;</span>
+            <img src="${imageUrl}?auto=format&fit=crop&w=1200&q=80" alt="Gallery image">
+        </div>
+    `;
+    
+    lightbox.querySelector('.close-lightbox').addEventListener('click', () => {
+        document.body.removeChild(lightbox);
+        document.body.style.overflow = 'auto';
+    });
+    
+    document.body.appendChild(lightbox);
+    document.body.style.overflow = 'hidden';
+}
+
+// ==================== REVIEW FORM ====================
+function setupReviewForm() {
     const starRating = document.querySelectorAll('.star-rating i');
     const reviewForm = document.getElementById('review-form');
     const uploadArea = document.getElementById('upload-area');
     const fileUpload = document.getElementById('file-upload');
     const previewContainer = document.getElementById('preview-container');
-    const viewAllPhotosBtn = document.getElementById('view-all-photos');
     const toggleOptions = document.querySelectorAll('.toggle-option');
 
-    // Initialize page
-    function initPage() {
-        renderReviews();
-        renderGallery();
-        setupEventListeners();
-    }
+    // Star rating interaction
+    starRating.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            starRating.forEach((s, i) => {
+                s.classList.toggle('fas', i < rating);
+                s.classList.toggle('far', i >= rating);
+                s.classList.toggle('active', i < rating);
+            });
+        });
+    });
 
-    // Render reviews
-    function renderReviews() {
-        reviewsGrid.innerHTML = '';
-        
-        reviews.forEach((review, index) => {
-            const reviewCard = document.createElement('div');
-            reviewCard.className = 'review-card';
-            reviewCard.style.animationDelay = `${index * 0.1}s`;
-            
-            // Generate stars HTML
-            let starsHtml = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= review.rating) {
-                    starsHtml += '<i class="fas fa-star"></i>';
-                } else {
-                    starsHtml += '<i class="far fa-star"></i>';
-                }
-            }
-            
-            // Generate pros HTML
-            let prosHtml = '';
-            if (review.pros && review.pros.length > 0) {
-                prosHtml = `<ul>${review.pros.map(pro => `<li>${pro}</li>`).join('')}</ul>`;
-            }
-            
-            // Generate cons HTML
-            let consHtml = '';
-            if (review.cons && review.cons.length > 0) {
-                consHtml = `<ul>${review.cons.map(con => `<li>${con}</li>`).join('')}</ul>`;
-            }
-            
-            // Generate reply HTML if exists
-            let replyHtml = '';
-            if (review.hasReply) {
-                replyHtml = `
-                    <div class="review-reply">
-                        <div class="reply-header">
-                            <i class="fas fa-reply"></i>
-                            ${review.reply.author} • ${review.reply.date}
-                        </div>
-                        <p>${review.reply.content}</p>
-                    </div>
-                `;
-            }
-            
-            reviewCard.innerHTML = `
-                <div class="review-header">
-                    <img src="${review.userAvatar}" alt="${review.userName}" class="user-avatar">
-                    <div class="user-info">
-                        <div class="user-name">
-                            ${review.userName}
-                            ${review.isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
-                        </div>
-                        <div class="review-date">${review.date}</div>
-                    </div>
-                    <div class="review-rating">
-                        ${starsHtml}
-                    </div>
-                </div>
-                <div class="review-body">
-                    <h3 class="review-title">${review.title}</h3>
-                    <p class="review-content">${review.content}</p>
-                    
-                    <div class="review-pros-cons">
-                        <div class="pros-cons-list pros-list">
-                            <h4><i class="fas fa-check-circle"></i> Pros</h4>
-                            ${prosHtml}
-                        </div>
-                        <div class="pros-cons-list cons-list">
-                            <h4><i class="fas fa-times-circle"></i> Cons</h4>
-                            ${consHtml}
-                        </div>
-                    </div>
-                    
-                    ${replyHtml}
-                </div>
-            `;
-            
-            reviewsGrid.appendChild(reviewCard);
-        });
-    }
+    // File upload handling
+    uploadArea.addEventListener('click', () => fileUpload.click());
+    fileUpload.addEventListener('change', (e) => handleFiles(e.target.files));
+    
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+    });
 
-    // Render gallery
-    function renderGallery() {
-        galleryGrid.innerHTML = ''; // Clear existing gallery items
+    // Form submission
+    reviewForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const rating = document.querySelector('.star-rating .active');
+        const title = document.getElementById('review-title').value;
+        const content = document.getElementById('review-content').value;
         
-        galleryImages.forEach((image, index) => {
-            const galleryItem = document.createElement('div');
-            galleryItem.className = 'gallery-item';
-            galleryItem.style.backgroundImage = `url(${image}?auto=format&fit=crop&w=500&q=80)`;
-            
-            galleryItem.innerHTML = `
-                <div class="gallery-overlay">
-                    <i class="fas fa-expand"></i>
-                </div>
-            `;
-            
-            // Add click event for gallery items
-            galleryItem.addEventListener('click', function() {
-                openLightbox(image);
-            });
-            
-            galleryGrid.appendChild(galleryItem);
-        });
-    }
-
-    // Open lightbox for gallery images
-    function openLightbox(imageUrl) {
-        const lightbox = document.createElement('div');
-        lightbox.className = 'lightbox';
-        lightbox.innerHTML = `
-            <div class="lightbox-content">
-                <span class="close-lightbox">&times;</span>
-                <img src="${imageUrl}?auto=format&fit=crop&w=1200&q=80" alt="Gallery image">
-            </div>
-        `;
-        
-        lightbox.querySelector('.close-lightbox').addEventListener('click', function() {
-            document.body.removeChild(lightbox);
-            document.body.style.overflow = 'auto';
-        });
-        
-        document.body.appendChild(lightbox);
-        document.body.style.overflow = 'hidden';
-    }
-
-    // Setup event listeners
-    function setupEventListeners() {
-        // Star rating
-        starRating.forEach(star => {
-            star.addEventListener('click', function() {
-                const rating = parseInt(this.getAttribute('data-rating'));
-                starRating.forEach((s, i) => {
-                    if (i < rating) {
-                        s.classList.remove('far');
-                        s.classList.add('fas', 'active');
-                    } else {
-                        s.classList.remove('fas', 'active');
-                        s.classList.add('far');
-                    }
-                });
-            });
-            
-            star.addEventListener('mouseover', function() {
-                const hoverRating = parseInt(this.getAttribute('data-rating'));
-                starRating.forEach((s, i) => {
-                    if (i < hoverRating) {
-                        s.classList.add('hovered');
-                    } else {
-                        s.classList.remove('hovered');
-                    }
-                });
-            });
-            
-            star.addEventListener('mouseout', function() {
-                starRating.forEach(s => {
-                    s.classList.remove('hovered');
-                });
-            });
-        });
-        
-        // Toggle options
-        toggleOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                toggleOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-        
-        // File upload
-        uploadArea.addEventListener('click', function() {
-            fileUpload.click();
-        });
-        
-        fileUpload.addEventListener('change', function(e) {
-            const files = e.target.files;
-            handleFiles(files);
-        });
-        
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.classList.add('dragover');
-        });
-        
-        uploadArea.addEventListener('dragleave', function() {
-            this.classList.remove('dragover');
-        });
-        
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
-        
-        // View all photos button
-        viewAllPhotosBtn.addEventListener('click', function() {
-            alert('This would show all photos in a lightbox or separate page');
-        });
-        
-        // Form submission
-        reviewForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validate form
-            const rating = document.querySelector('.star-rating .active');
-            const title = document.getElementById('review-title').value;
-            const content = document.getElementById('review-content').value;
-            
-            if (!rating) {
-                alert('Please select a rating');
-                return;
-            }
-            
-            if (!title || !content) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            // In a real app, you would send this data to your server
-            alert('Thank you for your review!');
-            this.reset();
-            previewContainer.innerHTML = '';
-            starRating.forEach(star => {
-                star.classList.remove('fas', 'active');
-                star.classList.add('far');
-            });
-            toggleOptions[0].classList.add('active');
-            toggleOptions[1].classList.remove('active');
-        });
-    }
-
-    // Handle uploaded files
-    function handleFiles(files) {
-        previewContainer.innerHTML = '';
-        
-        for (let i = 0; i < Math.min(files.length, 5); i++) {
-            const file = files[i];
-            
-            if (!file.type.match('image.*')) {
-                continue;
-            }
-            
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                const previewItem = document.createElement('div');
-                previewItem.className = 'preview-item';
-                
-                previewItem.innerHTML = `
-                    <img src="${e.target.result}" alt="Preview">
-                    <div class="remove-image">&times;</div>
-                `;
-                
-                previewContainer.appendChild(previewItem);
-                
-                // Add click event to remove button
-                previewItem.querySelector('.remove-image').addEventListener('click', function() {
-                    previewItem.remove();
-                });
-            };
-            
-            reader.readAsDataURL(file);
+        if (!rating || !title || !content) {
+            alert('Please complete all required fields');
+            return;
         }
-    }
-// ==================== THREE.JS INITIALIZATION ====================
+        
+        alert('Thank you for your review!');
+        reviewForm.reset();
+        previewContainer.innerHTML = '';
+    });
+}
+
+function handleFiles(files) {
+    const previewContainer = document.getElementById('preview-container');
+    previewContainer.innerHTML = '';
+    
+    Array.from(files).slice(0, 5).forEach(file => {
+        if (!file.type.match('image.*')) return;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.innerHTML = `
+                <img src="${e.target.result}" alt="Preview">
+                <div class="remove-image">&times;</div>
+            `;
+            previewItem.querySelector('.remove-image').addEventListener('click', () => previewItem.remove());
+            previewContainer.appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// ==================== 3D MODEL VIEWER ====================
 let scene, camera, renderer, controls, productModel;
 
 function init3DModel() {
-    // 1. Get container and show loading state
     const container = document.getElementById('product-model');
     container.innerHTML = '<div class="loading">Loading 3D viewer...</div>';
     
-    // ========== SCENE SETUP ==========
+    // Scene setup
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x333333); // Dark gray background
+    scene.background = new THREE.Color(0x333333);
     
-    // ========== DEBUG TEST CUBE (temporary) ==========
-    const testGeometry = new THREE.BoxGeometry();
-    const testMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const testCube = new THREE.Mesh(testGeometry, testMaterial);
+    // Temporary test cube
+    const testCube = new THREE.Mesh(
+        new THREE.BoxGeometry(),
+        new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+    );
     scene.add(testCube);
     
-    // ========== CAMERA SETUP ==========
+    // Camera setup
     camera = new THREE.PerspectiveCamera(
-        45, // Field of view
-        container.clientWidth / container.clientHeight, // Aspect ratio
-        0.1, // Near clipping plane
-        1000 // Far clipping plane
+        45,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        1000
     );
     camera.position.z = 5;
     
-    // ========== RENDERER SETUP ==========
-    renderer = new THREE.WebGLRenderer({ 
-        antialias: true,
-        alpha: true,
-        powerPreference: "high-performance"
-    });
+    // Renderer setup
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
     
-    // ========== LIGHTING SETUP ==========
-    // Clear any existing lights
-    scene.children = scene.children.filter(child => !(child instanceof THREE.Light));
-    
-    // Main lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 3); // Soft white light
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 5); // Bright directional light
+    // Lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 3));
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
     directionalLight.position.set(5, 10, 7);
     scene.add(directionalLight);
     
-    // ========== MODEL LOADING ==========
+    // Load model
     const loader = new THREE.GLTFLoader();
-    const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
-    
-    console.log("Attempting to load model from:", modelUrl);
-    
     loader.load(
-        modelUrl,
+        'model.glb',
         (gltf) => {
-            // Remove test cube
             scene.remove(testCube);
-            
-            // Add model to scene
             productModel = gltf.scene;
             
-            // Calculate model dimensions
+            // Auto-scale and center model
             const box = new THREE.Box3().setFromObject(productModel);
             const size = box.getSize(new THREE.Vector3());
-            console.log("Model dimensions:", size);
-            
-            // Auto-scale model
-            const targetSize = 3; // Target size in units
-            const scale = targetSize / Math.max(size.x, size.y, size.z);
+            const scale = 3 / Math.max(size.x, size.y, size.z);
             productModel.scale.set(scale, scale, scale);
-            
-            // Center model
-            const center = box.getCenter(new THREE.Vector3());
-            productModel.position.sub(center);
+            productModel.position.sub(box.getCenter(new THREE.Vector3()));
             
             scene.add(productModel);
-            
-            // Position camera
             camera.position.z = size.length() * 1.5;
             
-            // Add renderer to DOM
             container.innerHTML = '';
             container.appendChild(renderer.domElement);
-            
-            console.log("Model loaded successfully!");
         },
         undefined,
         (error) => {
             console.error("Model load failed:", error);
-            
-            // Show error message
             container.innerHTML = `
                 <div class="error">
                     <p>Failed to load 3D model</p>
                     <p>${error.message}</p>
                 </div>
             `;
-            
-            // Keep test cube visible as fallback
-            console.log("Showing test cube instead");
         }
     );
     
-    // ========== CONTROLS ==========
+    // Controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     
-    // ========== ANIMATION LOOP ==========
+    // Animation loop
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
@@ -564,7 +353,7 @@ function init3DModel() {
     }
     animate();
     
-    // ========== WINDOW RESIZE HANDLER ==========
+    // Window resize handler
     window.addEventListener('resize', () => {
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
@@ -572,18 +361,42 @@ function init3DModel() {
     });
 }
 
-// Start everything when DOM is ready
-if (document.readyState === 'complete') {
-    init3DModel();
-} else {
-    window.addEventListener('DOMContentLoaded', init3DModel);
-}
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize 3D model
-    init3DModel();
+// ==================== MOBILE MENU ====================
+function setupMobileMenu() {
+    const mobileMenuBtn = document.createElement('button');
+    mobileMenuBtn.className = 'mobile-menu-btn';
+    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
     
-    // Animate features on scroll
+    const nav = document.querySelector('header nav');
+    nav.insertBefore(mobileMenuBtn, nav.querySelector('.links'));
+    
+    mobileMenuBtn.addEventListener('click', () => {
+        document.querySelector('header nav .links').classList.toggle('show');
+    });
+    
+    document.querySelectorAll('header nav .links a').forEach(link => {
+        link.addEventListener('click', () => {
+            const links = document.querySelector('header nav .links');
+            links.classList.remove('show');
+        });
+    });
+}
+
+// ==================== INITIALIZATION ====================
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all components
+    if (toggleLink) toggleLink.addEventListener('click', handleFormToggle);
+    renderReviews();
+    renderGallery();
+    setupReviewForm();
+    setupMobileMenu();
+    
+    // Initialize 3D model if container exists
+    if (document.getElementById('product-model')) {
+        init3DModel();
+    }
+    
+    // Animation effects
     const featureCards = document.querySelectorAll('.feature-card');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -602,65 +415,48 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Floating particles animation
-    const particles = document.querySelectorAll('.floating-particle');
-    particles.forEach((particle, index) => {
-        // Randomize animation duration and delay
+    document.querySelectorAll('.floating-particle').forEach((particle, index) => {
         const duration = 15 + Math.random() * 10;
         const delay = Math.random() * 5;
+        const size = 5 + Math.random() * 10;
         
         particle.style.animation = `float ${duration}s infinite ease-in-out ${delay}s`;
-        
-        // Randomize size and opacity
-        const size = 5 + Math.random() * 10;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
         particle.style.opacity = 0.3 + Math.random() * 0.4;
     });
     
-    // Interactive holographic effect for buttons
-    const holographicBtns = document.querySelectorAll('.holographic-btn');
-    holographicBtns.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            btn.style.setProperty('--x', `${x}px`);
-            btn.style.setProperty('--y', `${y}px`);
-        });
-    });
-});
-
-// This will be replaced later with actual product model loading
-function loadProductModel(modelPath) {
-    // This function will be implemented when you have the 3D model files
-    console.log('Loading product model from:', modelPath);
-    // Example implementation would use THREE.GLTFLoader or similar
-}
-
-
-
-// Mobile menu toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.createElement('button');
-    mobileMenuBtn.className = 'mobile-menu-btn';
-    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    // Chatbase initialization
+    (function(){
+        if(!window.chatbase||window.chatbase("getState")!=="initialized"){
+            window.chatbase=(...args)=>{
+                if(!window.chatbase.q){window.chatbase.q=[]}
+                window.chatbase.q.push(args)
+            };
+            window.chatbase=new Proxy(window.chatbase,{
+                get(target,prop){
+                    if(prop==="q")return target.q
+                    return(...args)=>target(prop,...args)
+                }
+            })
+        }
+        const onLoad=function(){
+            const script=document.createElement("script");
+            script.src="https://www.chatbase.co/embed.min.js";
+            script.id="a8x2aNtBaMl_4_tRFcmlX";
+            script.domain="www.chatbase.co";
+            document.body.appendChild(script)
+        };
+        if(document.readyState==="complete"){onLoad()}
+        else{window.addEventListener("load",onLoad)}
+    })();
     
-    const nav = document.querySelector('header nav');
-    nav.insertBefore(mobileMenuBtn, nav.querySelector('.links'));
-    
-    mobileMenuBtn.addEventListener('click', function() {
-        const links = document.querySelector('header nav .links');
-        links.classList.toggle('show');
-    });
-    
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('header nav .links a').forEach(link => {
-        link.addEventListener('click', function() {
-            const links = document.querySelector('header nav .links');
-            if (links.classList.contains('show')) {
-                links.classList.remove('show');
-            }
-        });
+    window.chatbase('config', {
+        chatboxTitle: 'RootNRipple Assistant',
+        themeColor: '#FF1010',
+        welcomeMessage: 'Welcome to RootNRipple! Ask me anything.',
+        fontSize: '16px',
+        bubbleBackground: '#000000',
+        bubbleTextColor: '#FFFFFF'
     });
 });
