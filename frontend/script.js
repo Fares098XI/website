@@ -450,87 +450,118 @@ let scene, camera, renderer, controls, productModel;
 // Replace your init3DModel function with this:
 
 function init3DModel() {
-    // 1. Basic setup
     const container = document.getElementById('product-model');
-    container.innerHTML = '<div class="loading">Loading 3D viewer...</div>';
-    
-    // 2. Scene setup
+    container.innerHTML = '<div class="loading">Initializing 3D viewer...</div>';
+
+    // 1. Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x222222); // Dark gray background
-    
-    // 3. Enhanced lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 3); // Bright white ambient
+    scene.background = new THREE.Color(0x333333);
+
+    // 2. Enhanced lighting setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 3); // Strong ambient light
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-    directionalLight.position.set(5, 10, 7);
-    scene.add(directionalLight);
+    const light1 = new THREE.DirectionalLight(0xffffff, 2);
+    light1.position.set(5, 10, 7);
+    scene.add(light1);
+    
+    const light2 = new THREE.DirectionalLight(0xffffff, 1);
+    light2.position.set(-5, -5, -5);
+    scene.add(light2);
 
-    // 4. Camera setup
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000);
-    camera.position.set(0, 0, 5);
+    // 3. Camera setup
+    const camera = new THREE.PerspectiveCamera(
+        45, 
+        container.clientWidth / container.clientHeight, 
+        0.1, 
+        1000
+    );
+    camera.position.z = 5;
 
-    // 5. Renderer setup
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    // 4. Renderer setup
+    const renderer = new THREE.WebGLRenderer({ 
+        antialias: true,
+        alpha: true
+    });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.outputEncoding = THREE.sRGBEncoding;
 
-    // 6. Model loading with CORS workaround
+    // 5. Model loading with CORS proxy
     const loader = new THREE.GLTFLoader();
     const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
+    const proxyUrl = `https://cors-anywhere.herokuapp.com/${modelUrl}`;
     
-    // First try loading directly
+    // First try direct load
     loader.load(modelUrl, 
-        (gltf) => {
-            // Success handler
-            const model = gltf.scene;
-            model.scale.set(0.5, 0.5, 0.5);
-            
-            // Center model
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            model.position.sub(center);
-            
-            scene.add(model);
-            container.innerHTML = '';
-            container.appendChild(renderer.domElement);
-            
-            // Set camera to view entire model
-            const size = box.getSize(new THREE.Vector3());
-            camera.position.z = size.length() * 1.5;
-        },
+        (gltf) => onModelLoaded(gltf),
         undefined,
-        (error) => {
-            console.error('Direct load failed:', error);
-            // Fallback to fetch with CORS workaround
-            loadModelWithCORSWorkaround();
+        () => { // Fallback to CORS proxy if direct load fails
+            console.log('Trying CORS proxy...');
+            loader.load(proxyUrl, onModelLoaded, undefined, onLoadError);
         }
     );
 
-    function loadModelWithCORSWorkaround() {
-        fetch(modelUrl)
-            .then(response => response.blob())
-            .then(blob => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    loader.parse(reader.result, '', gltf => {
-                        const model = gltf.scene;
-                        scene.add(model);
-                        container.innerHTML = '';
-                        container.appendChild(renderer.domElement);
-                    });
-                };
-                reader.readAsDataURL(blob);
-            })
-            .catch(error => {
-                console.error('CORS workaround failed:', error);
-                showError
+    function onModelLoaded(gltf) {
+        const model = gltf.scene;
+        
+        // Scale and position model
+        model.scale.set(0.5, 0.5, 0.5);
+        model.position.set(0, -1, 0);
+        scene.add(model);
+        
+        // Center camera
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        model.position.sub(center);
+        camera.position.z = box.getSize(new THREE.Vector3()).length() * 1.5;
+        
+        // Add to DOM
+        container.innerHTML = '';
+        container.appendChild(renderer.domElement);
+        
+        // Add axes helper for debugging
+        scene.add(new THREE.AxesHelper(5));
+    }
 
-// Initialize when DOM is fully loaded
-if (document.readyState === 'complete') {
-    init3DModel();
-} else {
-    window.addEventListener('DOMContentLoaded', init3DModel);
+    function onLoadError(error) {
+        console.error('Model load failed:', error);
+        container.innerHTML = `
+            <div class="error">
+                <p>Failed to load 3D model</p>
+                <p>${error.message}</p>
+            </div>
+        `;
+        
+        // Fallback cube
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0xff0000,
+            wireframe: true
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+        container.appendChild(renderer.domElement);
+    }
+
+    // 6. Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // 7. Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // 8. Handle resize
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
 }
 function createFallbackModel() {
     console.log("Creating fallback model");
