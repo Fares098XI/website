@@ -468,28 +468,34 @@ function init3DModel() {
     // 4. Load model
     const loader = new THREE.GLTFLoader();
     const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
-    
-    loader.load(modelUrl, (gltf) => {
-        const model = gltf.scene;
-        model.scale.set(0.5, 0.5, 0.5);
-        scene.add(model);
+   // In script.js, line ~110, replace with:
+const loader = new THREE.GLTFLoader();
+loader.load(
+    'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb',
+    (gltf) => {
+        productModel = gltf.scene;
+        productModel.scale.set(0.5, 0.5, 0.5);
+        scene.add(productModel);
         
         // Center model
-        const box = new THREE.Box3().setFromObject(model);
+        const box = new THREE.Box3().setFromObject(productModel);
         const center = box.getCenter(new THREE.Vector3());
-        model.position.sub(center);
+        productModel.position.sub(center);
         
-        // Position camera
-        camera.position.z = box.getSize(new THREE.Vector3()).length() * 1.5;
-    }, undefined, (error) => {
+        // Add to DOM
+        document.getElementById('product-model').appendChild(renderer.domElement);
+    },
+    undefined,
+    (error) => {
         console.error('Error loading model:', error);
         // Fallback cube
         const geometry = new THREE.BoxGeometry();
         const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
-        camera.position.z = 5;
-    });
+        productModel = new THREE.Mesh(geometry, material);
+        scene.add(productModel);
+        document.getElementById('product-model').appendChild(renderer.domElement);
+    }
+);
     
     // 5. Add controls
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
