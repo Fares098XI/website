@@ -452,9 +452,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // 3D Product Model Initialization
 let productModel, camera, scene, renderer, controls;
 
-// 3D Product Model Initialization
-let productModel, camera, scene, renderer, controls;
-
 function init3DModel() {
     // Create scene
     scene = new THREE.Scene();
@@ -481,9 +478,12 @@ function init3DModel() {
     const pointLight = new THREE.PointLight(0x00f0ff, 1, 100);
     pointLight.position.set(5, 5, 5);
     scene.add(pointLight);
+        // ===== ADD LOADING MANAGER HERE =====
+    const loadingManager = new THREE.LoadingManager();
     
-    // Add GLTFLoader
-    const loader = new THREE.GLTFLoader();
+    // Show loading indicator when starting
+    loadingManager.onStart = function() {
+        document.getElementById('product-model').innerHTML = '<div class="loading">Loading model...</div>';
     
     // Load your Smart_curtains.glb model
     loader.load(
