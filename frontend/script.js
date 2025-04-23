@@ -444,6 +444,15 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(file);
         }
     }
+// Test this in your browser console
+fetch('https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb')
+  .then(response => {
+    if (!response.ok) throw new Error('Failed to fetch');
+    return response.blob();
+  })
+  .then(blob => console.log('File exists! Size:', blob.size, 'bytes'))
+  .catch(error => console.error('Error loading file:', error));
+    
 function init3DModel() {
     // Create scene
     scene = new THREE.Scene();
