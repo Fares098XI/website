@@ -450,6 +450,14 @@ let scene, camera, renderer, controls, productModel;
 // Replace your init3DModel function with this:
 
 function init3DModel() {
+        // Emergency debug
+    console.log("Three.js version:", THREE.REVISION);
+    const testGeometry = new THREE.BoxGeometry();
+    const testMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const testCube = new THREE.Mesh(testGeometry, testMaterial);
+    scene.add(testCube);
+    camera.position.z = 5;
+
     const container = document.getElementById('product-model');
     container.innerHTML = '<div class="loading">Initializing 3D viewer...</div>';
 
