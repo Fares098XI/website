@@ -81,7 +81,39 @@ const reviews = [
             content: "Thank you, Sarah! We're thrilled you love it. We're working on adding more color options soon!"
         }
     },
-    // Add more reviews as needed
+    {
+       id: 2,
+       userName: "Michael T.",
+       userAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
+       isVerified: true,
+       date: "February 28, 2025",
+       rating: 4,
+       title: "Great investment for energy savings",
+       content: "After 3 months of use, I've noticed a significant reduction in my electricity bill. The curtains are well-made and the automatic adjustment based on sunlight is brilliant. Only wish the mobile app had more customization options.",
+       pros: ["Noticeable energy savings", "High quality materials", "Smart features"],
+       cons: ["App could be better", "Pricey"],
+       helpfulCount: 32,
+       hasReply: false
+     },
+     {
+       id: 3,
+       userName: "David K.",
+       userAvatar: "https://randomuser.me/api/portraits/men/76.jpg",
+       isVerified: true,
+       date: "April 5, 2025",
+       rating: 5,
+       title: "Perfect for my home office",
+       content: "These curtains have transformed my workspace! The light control is perfect for reducing glare on my screens, and I love that they generate power while doing it. Installation was straightforward with the included guide.",
+       pros: ["Excellent light control", "Easy installation", "Quiet operation"],
+       cons: ["None so far"],
+       helpfulCount: 18,
+       hasReply: true,
+       reply: {
+           author: "Smart Curtain Team",
+           date: "April 6, 2025",
+           content: "Thanks for your feedback! We're glad they're working well in your home office."
+       }
+    }
 ];
 
 function renderReviews() {
