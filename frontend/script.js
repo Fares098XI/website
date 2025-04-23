@@ -444,14 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsDataURL(file);
         }
     }
-
-    // Initialize the page
-    initPage();
-});
-
-// 3D Product Model Initialization
-let productModel, camera, scene, renderer, controls;
-
 function init3DModel() {
     // Create scene
     scene = new THREE.Scene();
@@ -465,8 +457,37 @@ function init3DModel() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(document.getElementById('product-model').clientWidth, document.getElementById('product-model').clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-    document.getElementById('product-model').appendChild(renderer.domElement);
     
+    // Set up loading manager
+    const loadingManager = new THREE.LoadingManager(
+        // onLoad callback
+        () => {
+            document.getElementById('product-model').appendChild(renderer.domElement);
+        },
+        // onProgress callback
+        (url, itemsLoaded, itemsTotal) => {
+            console.log(`Loading ${itemsLoaded}/${itemsTotal}`);
+        },
+        // onError callback
+        (url) => {
+            console.error('Error loading:', url);
+            document.getElementById('product-model').innerHTML = '<div class="loading-error">Failed to load model</div>';
+            
+            // Fallback geometry
+            const geometry = new THREE.BoxGeometry(2, 3, 0.1);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x0066cc,
+                wireframe: true
+            });
+            productModel = new THREE.Mesh(geometry, material);
+            scene.add(productModel);
+            document.getElementById('product-model').appendChild(renderer.domElement);
+        }
+    );
+
+    // Show initial loading message
+    document.getElementById('product-model').innerHTML = '<div class="loading">Loading model...</div>';
+
     // Add lights
     const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
@@ -478,27 +499,23 @@ function init3DModel() {
     const pointLight = new THREE.PointLight(0x00f0ff, 1, 100);
     pointLight.position.set(5, 5, 5);
     scene.add(pointLight);
-        // ===== ADD LOADING MANAGER HERE =====
-    const loadingManager = new THREE.LoadingManager();
-    
-    // Show loading indicator when starting
-    loadingManager.onStart = function() {
-        document.getElementById('product-model').innerHTML = '<div class="loading">Loading model...</div>';
-    
-    // Load your Smart_curtains.glb model
+
+    // Initialize loader with loading manager
+    const loader = new THREE.GLTFLoader(loadingManager);
+
+    // Load your model - USE RAW GITHUB URL FORMAT
     loader.load(
-        'https://github.com/Fares098XI/website/blob/abf6a9d8746550c52a3f41fde6202b7d0b0a755a/frontend/Smart_curtains.glb',
-        function (gltf) {
+        'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb',
+        (gltf) => {
             productModel = gltf.scene;
             
-            // Scale and position the model if needed
+            // Scale and position the model
             productModel.scale.set(0.5, 0.5, 0.5);
             productModel.position.set(0, -1, 0);
             
-            // Add the model to the scene
             scene.add(productModel);
             
-            // Adjust camera to fit the model
+            // Center camera on model
             const box = new THREE.Box3().setFromObject(productModel);
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
@@ -507,18 +524,10 @@ function init3DModel() {
             controls.target.copy(center);
             controls.update();
         },
-        undefined, // Progress callback (optional)
-        function (error) {
+        undefined,
+        (error) => {
             console.error('Error loading model:', error);
-            
-            // Fallback: Create a placeholder if model fails to load
-            const geometry = new THREE.BoxGeometry(2, 3, 0.1);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0x0066cc,
-                wireframe: true
-            });
-            productModel = new THREE.Mesh(geometry, material);
-            scene.add(productModel);
+            loadingManager.onError(); // Trigger the error handler
         }
     );
     
@@ -531,6 +540,9 @@ function init3DModel() {
     controls.minPolarAngle = 0;
     controls.maxDistance = 10;
     controls.minDistance = 3;
+    
+    // ... rest of your controls code ...
+}
     
     // Model control buttons
     document.querySelectorAll('.model-control').forEach(button => {
