@@ -454,164 +454,133 @@ fetch('https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_
   .catch(error => console.error('Error loading file:', error));
     
 function init3DModel() {
-    // Create scene
+    console.log("Initializing 3D model...");
+    
+    // 1. Create scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000a19);
     
-    // Create camera
+    // 2. Create camera
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
     
-    // Create renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(document.getElementById('product-model').clientWidth, document.getElementById('product-model').clientHeight);
+    // 3. Create renderer
+    renderer = new THREE.WebGLRenderer({ 
+        antialias: true,
+        alpha: true // Add transparency
+    });
+    const container = document.getElementById('product-model');
+    renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     
-    // Set up loading manager
+    // 4. Set up loading manager with proper callbacks
     const loadingManager = new THREE.LoadingManager(
-        // onLoad callback
         () => {
-            document.getElementById('product-model').appendChild(renderer.domElement);
+            console.log("Loading complete!");
+            container.innerHTML = '';
+            container.appendChild(renderer.domElement);
         },
-        // onProgress callback
-        (url, itemsLoaded, itemsTotal) => {
-            console.log(`Loading ${itemsLoaded}/${itemsTotal}`);
+        (url, loaded, total) => {
+            console.log(`Loading progress: ${loaded}/${total}`);
         },
-        // onError callback
         (url) => {
-            console.error('Error loading:', url);
-            document.getElementById('product-model').innerHTML = '<div class="loading-error">Failed to load model</div>';
-            
-            // Fallback geometry
-            const geometry = new THREE.BoxGeometry(2, 3, 0.1);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0x0066cc,
-                wireframe: true
-            });
-            productModel = new THREE.Mesh(geometry, material);
-            scene.add(productModel);
-            document.getElementById('product-model').appendChild(renderer.domElement);
+            console.error(`Error loading ${url}`);
+            container.innerHTML = '<div class="loading-error">Failed to load 3D model</div>';
+            createFallbackModel();
         }
     );
 
-    // Show initial loading message
-    document.getElementById('product-model').innerHTML = '<div class="loading">Loading model...</div>';
+    // Show loading message
+    container.innerHTML = '<div class="loading">Loading 3D model...</div>';
 
-    // Add lights
-    const ambientLight = new THREE.AmbientLight(0x404040);
+    // 5. Add lights (crucial for visibility)
+    const ambientLight = new THREE.AmbientLight(0x404040, 2); // Increased intensity
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 1, 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+    directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
     
-    const pointLight = new THREE.PointLight(0x00f0ff, 1, 100);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
-
-    // Initialize loader with loading manager
+    // 6. Initialize loader
     const loader = new THREE.GLTFLoader(loadingManager);
-
-    // Load your model - USE RAW GITHUB URL FORMAT
+    
+    // 7. Load model - USE RAW GITHUB URL
+    const modelUrl = 'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb';
+    console.log(`Loading model from: ${modelUrl}`);
+    
     loader.load(
-        'https://raw.githubusercontent.com/Fares098XI/website/main/frontend/Smart_curtains.glb',
+        modelUrl,
         (gltf) => {
+            console.log("Model loaded successfully!");
             productModel = gltf.scene;
             
-            // Scale and position the model
+            // Check if model has contents
+            if (productModel.children.length === 0) {
+                console.warn("Model loaded but appears empty!");
+                createFallbackModel();
+                return;
+            }
+            
+            // Adjust model scale and position
             productModel.scale.set(0.5, 0.5, 0.5);
             productModel.position.set(0, -1, 0);
             
+            // Add model to scene
             scene.add(productModel);
             
-            // Center camera on model
-            const box = new THREE.Box3().setFromObject(productModel);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
+            // Set up camera to view entire model
+            const bbox = new THREE.Box3().setFromObject(productModel);
+            const center = bbox.getCenter(new THREE.Vector3());
+            const size = bbox.getSize(new THREE.Vector3());
             
-            camera.position.z = size.length() * 1.5;
+            camera.position.z = size.length() * 2;
             controls.target.copy(center);
             controls.update();
+            
+            console.log("Model dimensions:", size);
         },
         undefined,
         (error) => {
-            console.error('Error loading model:', error);
-            loadingManager.onError(); // Trigger the error handler
+            console.error("Error loading model:", error);
+            loadingManager.onError(modelUrl); // Trigger error handler
         }
     );
     
-    // Add OrbitControls
+    // 8. Add controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.screenSpacePanning = false;
-    controls.maxPolarAngle = Math.PI;
-    controls.minPolarAngle = 0;
-    controls.maxDistance = 10;
-    controls.minDistance = 3;
     
-    // ... rest of your controls code ...
-}
-    
-    // Model control buttons
-    document.querySelectorAll('.model-control').forEach(button => {
-        button.addEventListener('click', function() {
-            const action = this.getAttribute('data-action');
-            
-            switch(action) {
-                case 'rotate':
-                    controls.autoRotate = !controls.autoRotate;
-                    controls.autoRotateSpeed = 2;
-                    this.classList.toggle('active');
-                    break;
-                    
-                case 'zoom':
-                    // Toggle between close and far view
-                    if (camera.position.z > 7) {
-                        gsap.to(camera.position, { z: 5, duration: 1 });
-                    } else {
-                        gsap.to(camera.position, { z: 8, duration: 1 });
-                    }
-                    break;
-                    
-                case 'material':
-                    // Toggle between solid and wireframe view
-                    if (productModel) {
-                        productModel.traverse(function(child) {
-                            if (child.isMesh) {
-                                child.material.wireframe = !child.material.wireframe;
-                            }
-                        });
-                        this.classList.toggle('active');
-                    }
-                    break;
-            }
-        });
-    });
-    
-    // Handle window resize
+    // 9. Handle window resize
     window.addEventListener('resize', onWindowResize);
     
-    // Start animation loop
+    // 10. Start animation loop
     animate();
 }
+
+function createFallbackModel() {
+    console.log("Creating fallback model");
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ 
+        color: 0xff0000,
+        wireframe: true 
+    });
+    productModel = new THREE.Mesh(geometry, material);
+    scene.add(productModel);
+}
+
 function onWindowResize() {
-    camera.aspect = document.getElementById('product-model').clientWidth / document.getElementById('product-model').clientHeight;
+    const container = document.getElementById('product-model');
+    camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(document.getElementById('product-model').clientWidth, document.getElementById('product-model').clientHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
-    
-    // Add subtle animation to the model
-    if (productModel) {
-        productModel.rotation.y += 0.002;
-    }
 }
-
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize 3D model
