@@ -4,24 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Root & Ripple</title>
+    <!-- 
+        ========== STYLESHEETS ==========
+        - Main CSS file
+        - Google Fonts (Rajdhani)
+        - Font Awesome icons (two versions included)
+    -->
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 
+        ========== INLINE STYLES ==========
+        - Temporary styles for 3D model container
+        - Consider moving to main CSS file later
+    -->
     <style>
-        /* Add minimal CSS for 3D model container */
         #product-model {
             width: 100%;
             height: 500px;
             background: #f0f0f0;
             margin: 20px 0;
         }
-        canvas {
-            display: block;
-        }
+        canvas { display: block; }
     </style>
 </head>
 <body>
+
+
+    <!-- 
+        ========== HEADER ==========
+        - Fixed position for constant access
+        - Logo
+        - Navigation links with hover effects
+        - Login button (CTA)
+    -->
     <header>
         <nav>
             <a href="#" class="logo">Root <span>&</span> Ripple</a>
@@ -35,18 +51,32 @@
             <button type="button"><a href="#login">Log in</a></button>
         </nav>
     </header>
+    
 
+    <!-- 
+        ========== HOME SECTION ==========
+        - Full-viewport height
+        - Background image (ensure 'background-image.jpg' exists)
+        - Primary CTA button
+    -->
     <div id="home" class="hero">
         <div class="container">
             <div class="div-text">
                 <h1>WE INTEGRATE</h1>
                 <span>TECHNOLOGY & ENERGY</span>
-                <p>At Root & Ripple, we harness green energy through innovative recycling, transforming waste into sustainable solutions for a cleaner planet.</p>
+                <p>At Root & Ripple, we harness green energy through innovative recycling...</p>
                 <button type="button"><a href="#about">GET STARTED</a></button>
             </div>
         </div>
     </div>
 
+
+    <!-- 
+        ========== ABOUT SECTION ==========
+        - Company mission/vision
+        - Timeline component
+        - Core values cards
+    -->
     <section id="about" class="about-hero">
         <div class="hero-overlay">
             <h1>About Root & Ripple</h1>
@@ -56,7 +86,7 @@
                 lower costs, and contribute to a greener planet. <br>
                 We envision a future where energy efficiency is seamlessly integrated into daily life. By harnessing cutting-edge renewable energy sources, we aim 
                 to redefine how people interact with energy-efficient solutions in their homes, offices, and commercial spaces.</p>
-            <button id="learnMoreBtn">Learn More</button>
+            <button type="button" class="learnMoreBtn"><a href="#our-journey">Learn More</a></button>
         </div>
         <div class="hero-glow"></div>
     </section>
@@ -109,25 +139,27 @@
         </div>
     </section>
 
+
+    <!-- 
+        ========== PRODUCT SECTION ==========
+        - 3D model viewer container
+        - Feature cards with tech specs
+        - Pricing tiers
+    -->
     <div class="producty" id="product">
         <section class="herox-section">
             <div class="herox-content">
                 <h1 class="neon-text">ENERGY-GENERATING SMART CURTAINS</h1>
                 <p class="subtitle">Harness the power of sunlight and motion to reduce your energy bills</p>
-                <button class="cyberpunk-btn">EXPLORE TECH SPECS</button>
+                <button class="cyberpunk-btn" type="button"><a href="#tech-specs">EXPLORE TECH SPECS</a></button>
             </div>
             <div class="product-visualization">
                 <!-- 3D Model Container -->
                 <div id="product-model"></div>
-                <div class="visualization-controls">
-                    <button class="model-control" data-action="rotate">ROTATE</button>
-                    <button class="model-control" data-action="zoom">ZOOM</button>
-                    <button class="model-control" data-action="material">MATERIAL</button>
-                </div>
             </div>
         </section>
 
-        <section class="featuresx-section">
+        <section  id="tech-specs" class="featuresx-section">
             <h2 class="sectionx-title">TRIPLE POWER GENERATION SYSTEM</h2>
             <div class="featuresx-grid">
                 <div class="featurex-card">
@@ -293,6 +325,13 @@
         <div class="floating-particle" style="top:40%; left:50%;"></div>
     </div>
 
+
+    <!-- 
+        ========== REVIEWS SECTION ==========
+        - Dynamic review cards
+        - Filtering system
+        - Review submission form
+    -->
     <div class="reviewy" id="reviews">
         <section class="hero-section">
             <div class="containery">
@@ -458,6 +497,13 @@
         </section>
     </div>
 
+
+       <!-- 
+        ========== CONTACT SECTION ==========
+        - Contact form
+        - Map integration
+        - Social media links
+    -->
     <div id="contact" class="contact-hero">
         <div class="containerx">
             <h1>Contact</h1>
@@ -512,6 +558,12 @@
         </div>
     </section>
 
+
+        <!-- 
+        ========== LOGIN/REGISTER MODAL ==========
+        - Toggle between forms
+        - Form validation
+    -->
     <div id="login" class="login-page">
         <div class="login-container">
             <div class="heading-line"></div>
@@ -558,6 +610,13 @@
         </div>
     </div>
 
+
+        <!-- 
+        ========== FOOTER ==========
+        - Quick links
+        - Contact info
+        - Copyright
+    -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-column">
@@ -715,7 +774,7 @@
         });
     </script>
 
-    <!-- Your existing script.js -->
+    <!-- Main script.js -->
     <script src="script.js"></script>
 </body>
 </html>
