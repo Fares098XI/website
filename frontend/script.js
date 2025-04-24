@@ -1,8 +1,10 @@
 // ==================== LOGIN/REGISTER TOGGLE ====================
+// Get elements for login/register toggle
 const toggleLink = document.getElementById('toggleLink');
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 
+// Function to handle form toggle between login and register
 function handleFormToggle(event) {
     event.preventDefault();
     
@@ -27,6 +29,7 @@ function handleFormToggle(event) {
 }
 
 // ==================== FORM SUBMISSIONS ====================
+// Login form submission handler
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const email = document.getElementById('email').value;
@@ -40,6 +43,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     }
 });
 
+// Register form submission handler
 document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const firstName = document.getElementById('firstName').value;
@@ -61,6 +65,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
 });
 
 // ==================== REVIEW SYSTEM ====================
+// Sample review data
 const reviews = [
     {
         id: 1,
@@ -81,13 +86,47 @@ const reviews = [
             content: "Thank you, Sarah! We're thrilled you love it. We're working on adding more color options soon!"
         }
     },
-    // Add more reviews as needed
+    {
+       id: 2,
+       userName: "Michael T.",
+       userAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
+       isVerified: true,
+       date: "February 28, 2025",
+       rating: 4,
+       title: "Great investment for energy savings",
+       content: "After 3 months of use, I've noticed a significant reduction in my electricity bill. The curtains are well-made and the automatic adjustment based on sunlight is brilliant. Only wish the mobile app had more customization options.",
+       pros: ["Noticeable energy savings", "High quality materials", "Smart features"],
+       cons: ["App could be better", "Pricey"],
+       helpfulCount: 32,
+       hasReply: false
+     },
+     {
+       id: 3,
+       userName: "David K.",
+       userAvatar: "https://randomuser.me/api/portraits/men/76.jpg",
+       isVerified: true,
+       date: "April 5, 2025",
+       rating: 5,
+       title: "Perfect for my home office",
+       content: "These curtains have transformed my workspace! The light control is perfect for reducing glare on my screens, and I love that they generate power while doing it. Installation was straightforward with the included guide.",
+       pros: ["Excellent light control", "Easy installation", "Quiet operation"],
+       cons: ["None so far"],
+       helpfulCount: 18,
+       hasReply: true,
+       reply: {
+           author: "Smart Curtain Team",
+           date: "April 6, 2025",
+           content: "Thanks for your feedback! We're glad they're working well in your home office."
+       }
+    }
 ];
 
+// Function to render reviews on the page
 function renderReviews() {
     const reviewsGrid = document.getElementById('reviews-grid');
     reviewsGrid.innerHTML = '';
     
+    // Create a card for each review
     reviews.forEach((review, index) => {
         const reviewCard = document.createElement('div');
         reviewCard.className = 'review-card';
@@ -116,6 +155,7 @@ function renderReviews() {
             </div>
         ` : '';
         
+        // Build review card HTML
         reviewCard.innerHTML = `
             <div class="review-header">
                 <img src="${review.userAvatar}" alt="${review.userName}" class="user-avatar">
@@ -150,16 +190,20 @@ function renderReviews() {
 }
 
 // ==================== GALLERY SYSTEM ====================
+// Sample gallery images
 const galleryImages = [
-    "https://images.unsplash.com/photo-1513519245088-0e12902e5a38",
-    "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750"
+     "https://images.unsplash.com/photo-1513519245088-0e12902e5a38",
+     "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
+     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
+     "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
 ];
 
+// Function to render gallery images
 function renderGallery() {
     const galleryGrid = document.querySelector('.gallery-grid');
     galleryGrid.innerHTML = '';
     
+    // Create a gallery item for each image
     galleryImages.forEach(image => {
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-item';
@@ -171,6 +215,7 @@ function renderGallery() {
     });
 }
 
+// Function to open lightbox for gallery images
 function openLightbox(imageUrl) {
     const lightbox = document.createElement('div');
     lightbox.className = 'lightbox';
@@ -191,6 +236,7 @@ function openLightbox(imageUrl) {
 }
 
 // ==================== REVIEW FORM ====================
+// Function to set up the review form functionality
 function setupReviewForm() {
     const starRating = document.querySelectorAll('.star-rating i');
     const reviewForm = document.getElementById('review-form');
@@ -248,6 +294,7 @@ function setupReviewForm() {
     });
 }
 
+// Function to handle file uploads for review images
 function handleFiles(files) {
     const previewContainer = document.getElementById('preview-container');
     previewContainer.innerHTML = '';
@@ -271,8 +318,10 @@ function handleFiles(files) {
 }
 
 // ==================== 3D MODEL VIEWER ====================
+// Variables for 3D model viewer
 let scene, camera, renderer, controls, productModel;
 
+// Function to initialize 3D model viewer
 function init3DModel() {
     const container = document.getElementById('product-model');
     container.innerHTML = '<div class="loading">Loading 3D viewer...</div>';
@@ -362,6 +411,7 @@ function init3DModel() {
 }
 
 // ==================== MOBILE MENU ====================
+// Function to set up mobile menu functionality
 function setupMobileMenu() {
     const mobileMenuBtn = document.createElement('button');
     mobileMenuBtn.className = 'mobile-menu-btn';
@@ -383,6 +433,7 @@ function setupMobileMenu() {
 }
 
 // ==================== INITIALIZATION ====================
+// Initialize all components when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all components
     if (toggleLink) toggleLink.addEventListener('click', handleFormToggle);
@@ -396,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
         init3DModel();
     }
     
-    // Animation effects
+    // Animation effects for feature cards
     const featureCards = document.querySelectorAll('.feature-card');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -451,6 +502,7 @@ document.addEventListener('DOMContentLoaded', function() {
         else{window.addEventListener("load",onLoad)}
     })();
     
+    // Configure chatbase settings
     window.chatbase('config', {
         chatboxTitle: 'RootNRipple Assistant',
         themeColor: '#FF1010',
