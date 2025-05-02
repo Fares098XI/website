@@ -1,12 +1,38 @@
-// ==================== LOGIN/REGISTER TOGGLE ====================
-// Get elements for login/register toggle
-const toggleLink = document.getElementById('toggleLink');
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
+// ==================== THEME TOGGLE ====================
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Check for saved theme preference or use system preference
+    const currentTheme = localStorage.getItem('theme') || 
+                        (prefersDarkScheme.matches ? 'dark' : 'light');
+    
+    // Apply the current theme
+    if (currentTheme === 'light') {
+        document.body.classList.add('light-mode');
+    }
+    
+    // Toggle theme when button is clicked
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        const theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+        localStorage.setItem('theme', theme);
+    });
+    
+    // Listen for system theme changes
+    prefersDarkScheme.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            document.body.classList.toggle('light-mode', !e.matches);
+        }
+    });
+}
 
-// Function to handle form toggle between login and register
+// ==================== LOGIN/REGISTER TOGGLE ====================
 function handleFormToggle(event) {
     event.preventDefault();
+    
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
     
     if (loginForm.classList.contains('active-form')) {
         // Switch to Register form
@@ -29,43 +55,44 @@ function handleFormToggle(event) {
 }
 
 // ==================== FORM SUBMISSIONS ====================
-// Login form submission handler
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+function setupFormSubmissions() {
+    // Login form submission handler
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-    if (email && password) {
-        alert('Login successful!');
-        // Add actual login logic here
-    } else {
-        alert('Please fill out all fields.');
-    }
-});
-
-// Register form submission handler
-document.getElementById('registerForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const regEmail = document.getElementById('regEmail').value;
-    const regPassword = document.getElementById('regPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    if (firstName && lastName && regEmail && regPassword && confirmPassword) {
-        if (regPassword === confirmPassword) {
-            alert('Registration successful!');
-            // Add actual registration logic here
+        if (email && password) {
+            alert('Login successful!');
+            // Add actual login logic here
         } else {
-            alert('Passwords do not match.');
+            alert('Please fill out all fields.');
         }
-    } else {
-        alert('Please fill out all fields.');
-    }
-});
+    });
+
+    // Register form submission handler
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const regEmail = document.getElementById('regEmail').value;
+        const regPassword = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (firstName && lastName && regEmail && regPassword && confirmPassword) {
+            if (regPassword === confirmPassword) {
+                alert('Registration successful!');
+                // Add actual registration logic here
+            } else {
+                alert('Passwords do not match.');
+            }
+        } else {
+            alert('Please fill out all fields.');
+        }
+    });
+}
 
 // ==================== REVIEW SYSTEM ====================
-// Sample review data
 const reviews = [
     {
         id: 1,
@@ -121,18 +148,17 @@ const reviews = [
     }
 ];
 
-// Function to render reviews on the page
 function renderReviews() {
     const reviewsGrid = document.getElementById('reviews-grid');
+    if (!reviewsGrid) return;
+    
     reviewsGrid.innerHTML = '';
     
-    // Create a card for each review
     reviews.forEach((review, index) => {
         const reviewCard = document.createElement('div');
         reviewCard.className = 'review-card';
         reviewCard.style.animationDelay = `${index * 0.1}s`;
         
-        // Generate stars HTML
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
             starsHtml += i <= review.rating 
@@ -140,11 +166,9 @@ function renderReviews() {
                 : '<i class="far fa-star"></i>';
         }
         
-        // Generate pros/cons HTML
         const prosHtml = review.pros?.length ? `<ul>${review.pros.map(pro => `<li>${pro}</li>`).join('')}</ul>` : '';
         const consHtml = review.cons?.length ? `<ul>${review.cons.map(con => `<li>${con}</li>`).join('')}</ul>` : '';
         
-        // Generate reply HTML if exists
         const replyHtml = review.hasReply ? `
             <div class="review-reply">
                 <div class="reply-header">
@@ -155,7 +179,6 @@ function renderReviews() {
             </div>
         ` : '';
         
-        // Build review card HTML
         reviewCard.innerHTML = `
             <div class="review-header">
                 <img src="${review.userAvatar}" alt="${review.userName}" class="user-avatar">
@@ -190,7 +213,6 @@ function renderReviews() {
 }
 
 // ==================== GALLERY SYSTEM ====================
-// Sample gallery images
 const galleryImages = [
      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38",
      "https://images.unsplash.com/photo-1493809842364-78817add7ffb",
@@ -198,12 +220,12 @@ const galleryImages = [
      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
 ];
 
-// Function to render gallery images
 function renderGallery() {
     const galleryGrid = document.querySelector('.gallery-grid');
+    if (!galleryGrid) return;
+    
     galleryGrid.innerHTML = '';
     
-    // Create a gallery item for each image
     galleryImages.forEach(image => {
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-item';
@@ -215,7 +237,6 @@ function renderGallery() {
     });
 }
 
-// Function to open lightbox for gallery images
 function openLightbox(imageUrl) {
     const lightbox = document.createElement('div');
     lightbox.className = 'lightbox';
@@ -236,10 +257,11 @@ function openLightbox(imageUrl) {
 }
 
 // ==================== REVIEW FORM ====================
-// Function to set up the review form functionality
 function setupReviewForm() {
-    const starRating = document.querySelectorAll('.star-rating i');
     const reviewForm = document.getElementById('review-form');
+    if (!reviewForm) return;
+
+    const starRating = document.querySelectorAll('.star-rating i');
     const uploadArea = document.getElementById('upload-area');
     const fileUpload = document.getElementById('file-upload');
     const previewContainer = document.getElementById('preview-container');
@@ -294,9 +316,10 @@ function setupReviewForm() {
     });
 }
 
-// Function to handle file uploads for review images
 function handleFiles(files) {
     const previewContainer = document.getElementById('preview-container');
+    if (!previewContainer) return;
+    
     previewContainer.innerHTML = '';
     
     Array.from(files).slice(0, 5).forEach(file => {
@@ -318,12 +341,12 @@ function handleFiles(files) {
 }
 
 // ==================== 3D MODEL VIEWER ====================
-// Variables for 3D model viewer
 let scene, camera, renderer, controls, productModel;
 
-// Function to initialize 3D model viewer
 function init3DModel() {
     const container = document.getElementById('product-model');
+    if (!container) return;
+    
     container.innerHTML = '<div class="loading">Loading 3D viewer...</div>';
     
     // Scene setup
@@ -411,13 +434,14 @@ function init3DModel() {
 }
 
 // ==================== MOBILE MENU ====================
-// Function to set up mobile menu functionality
 function setupMobileMenu() {
     const mobileMenuBtn = document.createElement('button');
     mobileMenuBtn.className = 'mobile-menu-btn';
     mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
     
     const nav = document.querySelector('header nav');
+    if (!nav) return;
+    
     nav.insertBefore(mobileMenuBtn, nav.querySelector('.links'));
     
     mobileMenuBtn.addEventListener('click', () => {
@@ -432,22 +456,8 @@ function setupMobileMenu() {
     });
 }
 
-// ==================== INITIALIZATION ====================
-// Initialize all components when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
-    if (toggleLink) toggleLink.addEventListener('click', handleFormToggle);
-    renderReviews();
-    renderGallery();
-    setupReviewForm();
-    setupMobileMenu();
-    
-    // Initialize 3D model if container exists
-    if (document.getElementById('product-model')) {
-        init3DModel();
-    }
-    
-    // Animation effects for feature cards
+// ==================== ANIMATIONS ====================
+function setupAnimations() {
     const featureCards = document.querySelectorAll('.feature-card');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -476,8 +486,10 @@ document.addEventListener('DOMContentLoaded', function() {
         particle.style.height = `${size}px`;
         particle.style.opacity = 0.3 + Math.random() * 0.4;
     });
-    
-    // Chatbase initialization
+}
+
+// ==================== CHATBASE INITIALIZATION ====================
+function initChatbase() {
     (function(){
         if(!window.chatbase||window.chatbase("getState")!=="initialized"){
             window.chatbase=(...args)=>{
@@ -502,7 +514,6 @@ document.addEventListener('DOMContentLoaded', function() {
         else{window.addEventListener("load",onLoad)}
     })();
     
-    // Configure chatbase settings
     window.chatbase('config', {
         chatboxTitle: 'RootNRipple Assistant',
         themeColor: '#FF1010',
@@ -511,4 +522,26 @@ document.addEventListener('DOMContentLoaded', function() {
         bubbleBackground: '#000000',
         bubbleTextColor: '#FFFFFF'
     });
+}
+
+// ==================== INITIALIZATION ====================
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all components
+    setupThemeToggle();
+    
+    const toggleLink = document.getElementById('toggleLink');
+    if (toggleLink) toggleLink.addEventListener('click', handleFormToggle);
+    
+    setupFormSubmissions();
+    renderReviews();
+    renderGallery();
+    setupReviewForm();
+    setupMobileMenu();
+    setupAnimations();
+    initChatbase();
+    
+    // Initialize 3D model if container exists
+    if (document.getElementById('product-model')) {
+        init3DModel();
+    }
 });
